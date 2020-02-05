@@ -1,0 +1,121 @@
+@startuml
+
+class Class {
+}
+enum ClassName {
+    Protector
+    Survivalist
+    Medic
+    Ronin
+    War Magus
+    Gunner
+    Zodiac
+    Farmer
+    Ninja
+    Sovereign
+    Shogun
+    Nightseeker
+    Landsknecht
+    Arcanist
+    Imperial
+    Highlander
+    Harbinger
+    Pugilist
+    Hero
+    Vampire
+}
+class SkillInfo {
+    String name
+    String description
+    int maxLevel
+}
+abstract class Equipment
+class Weapon {
+}
+class WeaponType {
+    String name
+    int speedMod
+}
+enum WeaponTypeName {
+    Sword
+    Bows
+    Katana
+    Stave
+    Gun
+    Spear
+    Rapier
+    Knife
+    Drive Blade
+    Fist
+    Scythes
+}
+class Armor {
+
+}
+class ArmorType {
+}
+enum ArmorTypeName {
+    Heavy Armor
+    Light Armor
+    Cloth Armor
+    Shield
+    Helmet
+    Glove
+    Boots
+    Accessory
+}
+abstract class StatMod
+class FlatStatMod {
+    int value
+}
+class PercentageStatMod {
+    value
+}
+
+enum Stat {
+    HP
+    TP
+    STR
+    INT
+    VIT
+    WIS
+    AGI
+    LUC
+}
+
+Equipment <|-- Weapon
+Equipment <|-- Armor
+StatMod <|-- FlatStatMod
+StatMod <|-- PercentageStatMod
+
+Class <-- WeaponType : can use specific
+Class <-- ArmorType : can use specific
+Class <.. SkillInfo :belongs to
+Class o-- ClassName
+Class o-- "8" StatMod
+Stat "1" -- StatMod
+SkillInfo <.. "*" SkillInfo : dependency
+Weapon "*" o-- "1" WeaponType
+WeaponType o-- "*" StatMod
+WeaponType o-- WeaponTypeName
+Armor "*" o-- "1" ArmorType
+ArmorType o-- "*" StatMod
+ArmorType o-- ArmorTypeName
+
+class Party {
+}
+
+class Character {
+    int level
+}
+class Skill {
+    int level
+}
+
+Party "1" o-- "1..5" Character
+Character "1" *-- "*" Skill
+Character "*" o-- "0..4" Equipment
+Character "*" o-- "1" Class
+Skill "*" o-- "1" SkillInfo
+
+@enduml
