@@ -1,6 +1,6 @@
 @startuml
 
-class Class {
+class role {
 }
 enum ClassName {
     Protector
@@ -88,11 +88,11 @@ Equipment <|-- Armor
 StatMod <|-- FlatStatMod
 StatMod <|-- PercentageStatMod
 
-Class <-- WeaponType : can use specific
-Class <-- ArmorType : can use specific
-Class <.. SkillInfo :belongs to
-Class o-- ClassName
-Class o-- "8" StatMod
+role <-- WeaponType : can use specific
+role <-- ArmorType : can use specific
+role <.. SkillInfo :belongs to
+role o-- ClassName
+role o-- "8" StatMod
 Stat "1" -- StatMod
 SkillInfo <.. "*" SkillInfo : dependency
 Weapon "*" o-- "1" WeaponType
@@ -115,7 +115,7 @@ class Skill {
 Party "1" o-- "1..5" Character
 Character "1" *-- "*" Skill
 Character "*" o-- "0..4" Equipment
-Character "*" o-- "1" Class
+Character "*" o-- "1" role
 Skill "*" o-- "1" SkillInfo
 
 @enduml
