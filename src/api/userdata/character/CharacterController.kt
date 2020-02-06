@@ -1,4 +1,4 @@
-package com.kaiserpudding.userdata.character
+package com.kaiserpudding.api.userdata.character
 
 import com.kaiserpudding.model.Character
 import com.kaiserpudding.model.NewCharacter
@@ -10,7 +10,7 @@ import io.ktor.routing.*
 import java.lang.IllegalArgumentException
 
 fun Route.character(characterService: CharacterService) {
-    route("/api/character") {
+    route("api/character") {
 
         get("/") {
             call.respond(characterService.getAll())

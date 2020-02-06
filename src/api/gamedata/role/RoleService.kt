@@ -1,4 +1,4 @@
-package com.kaiserpudding.gamedata.role
+package com.kaiserpudding.api.gamedata.role
 
 import com.kaiserpudding.database.DatabaseFactory.dbQuery
 import com.kaiserpudding.model.Role

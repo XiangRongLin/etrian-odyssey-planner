@@ -1,4 +1,4 @@
-package com.kaiserpudding.gamedata.role
+package com.kaiserpudding.api.gamedata.role
 
 import io.ktor.application.call
 import io.ktor.response.respond
@@ -10,7 +10,7 @@ fun Route.role(repository: RoleRepository) {
     route("/api/role") {
 
         get("/") {
-           call.respond(RoleRepository.getAll())
+           call.respond(repository.getAll())
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.kaiserpudding.userdata.character
+package com.kaiserpudding.api.userdata.character
 
 import com.kaiserpudding.database.DatabaseFactory.dbQuery
 import com.kaiserpudding.model.Character
@@ -20,6 +20,7 @@ class CharacterService {
 
     suspend fun get(id: Int): Character? = dbQuery {
         CharacterTable.select { CharacterTable.id eq id }
+            .limit(1)
             .mapNotNull { toCharacter(it) }
             .singleOrNull()
     }

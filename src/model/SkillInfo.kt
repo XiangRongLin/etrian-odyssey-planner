@@ -16,5 +16,5 @@ data class SkillInfo(
     val name: String,
     val description: String,
     val maxLevel: Int,
-    val prerequisites: List<SkillInfoPrerequisite>?
+    val prerequisites: List<SkillInfoPrerequisite>? = null
 )

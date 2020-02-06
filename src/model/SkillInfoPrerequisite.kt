@@ -9,6 +9,6 @@ object SkillInfoPrerequisiteTable : Table("skill_info_prerequisites") {
 }
 
 data class SkillInfoPrerequisite(
-    val prerequisiteId: SkillInfo,
+    val prerequisiteId: Int,
     val prerequisiteLevel: Int
 )
