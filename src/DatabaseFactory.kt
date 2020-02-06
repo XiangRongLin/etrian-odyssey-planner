@@ -1,7 +1,6 @@
 package com.kaiserpudding
 
-import com.kaiserpudding.model.Characters
-import com.kaiserpudding.model.Roles
+import com.kaiserpudding.model.*
 import com.kaiserpudding.role.RoleService
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -19,8 +18,11 @@ object DatabaseFactory {
         val dataSource = HikariDataSource(config)
         Database.connect(dataSource)
         dbQuery {
-//            initCharacters()
-//            initRoles()
+            SchemaUtils.drop(Characters, Roles, SkillInfos, SkillInfoPrerequisites)
+            initCharacters()
+            initRoles()
+            SchemaUtils.create(SkillInfos)
+            SchemaUtils.create(SkillInfoPrerequisites)
         }
     }
 

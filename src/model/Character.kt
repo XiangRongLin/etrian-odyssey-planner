@@ -2,8 +2,8 @@ package com.kaiserpudding.model
 
 import org.jetbrains.exposed.sql.Table
 
-object Characters: Table() {
-    val id = integer("id").primaryKey().autoIncrement()
+object Characters: Table("characters") {
+    val id = integer("id").primaryKey().autoIncrement().uniqueIndex()
     val name = varchar("name", 30)
 }
 
