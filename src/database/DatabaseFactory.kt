@@ -1,10 +1,8 @@
 package com.kaiserpudding.database
 
 import com.kaiserpudding.api.gamedata.role.RoleService
-import com.kaiserpudding.model.CharacterTable
-import com.kaiserpudding.model.RoleTable
-import com.kaiserpudding.model.SkillInfoPrerequisiteTable
-import com.kaiserpudding.model.SkillInfoTable
+import com.kaiserpudding.api.userdata.character.CharacterService
+import com.kaiserpudding.model.*
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
@@ -26,15 +24,17 @@ object DatabaseFactory {
         val dataSource = HikariDataSource(config)
         Database.connect(dataSource)
         dbQuery {
-//            SchemaUtils.drop(CharacterTable, RoleTable, SkillInfoTable, SkillInfoPrerequisiteTable)
-//            initCharacters()
-//            initRoles()
-//            initSkillInfo()
+            SchemaUtils.drop(CharacterTable, RoleTable, SkillInfoTable, SkillInfoPrerequisiteTable)
+            initCharacters()
+            initRoles()
+            initSkillInfo()
+            initSkill()
         }
     }
 
     private suspend fun initCharacters() {
         SchemaUtils.create(CharacterTable)
+        CharacterService().create(NewCharacter(null, name = "Ori"))
     }
 
     private suspend fun initRoles() {
@@ -75,6 +75,9 @@ object DatabaseFactory {
                 statement.execute(query)
             }
         }
+    }
 
+    private suspend fun initSkill() {
+        SchemaUtils.create(SkillTable)
     }
 }

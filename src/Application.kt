@@ -53,6 +53,7 @@ fun Application.module(testing: Boolean = false) {
         character(CharacterService())
         role(RoleService())
         skillInfo(SkillInfoService())
+        skill(SkillService())
     }
 
     routing {
