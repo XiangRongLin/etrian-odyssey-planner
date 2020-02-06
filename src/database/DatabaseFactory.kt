@@ -1,9 +1,9 @@
 package com.kaiserpudding.database
 
-import com.kaiserpudding.model.Characters
-import com.kaiserpudding.model.Roles
-import com.kaiserpudding.model.SkillInfoPrerequisites
-import com.kaiserpudding.model.SkillInfos
+import com.kaiserpudding.model.CharacterTable
+import com.kaiserpudding.model.RoleTable
+import com.kaiserpudding.model.SkillInfoPrerequisiteTable
+import com.kaiserpudding.model.SkillInfoTable
 import com.kaiserpudding.gamedata.role.RoleService
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -26,7 +26,7 @@ object DatabaseFactory {
         val dataSource = HikariDataSource(config)
         Database.connect(dataSource)
         dbQuery {
-            SchemaUtils.drop(Characters, Roles, SkillInfos, SkillInfoPrerequisites)
+            SchemaUtils.drop(CharacterTable, RoleTable, SkillInfoTable, SkillInfoPrerequisiteTable)
             initCharacters()
             initRoles()
             initSkillInfo()
@@ -34,11 +34,11 @@ object DatabaseFactory {
     }
 
     private suspend fun initCharacters() {
-        SchemaUtils.create(Characters)
+        SchemaUtils.create(CharacterTable)
     }
 
     private suspend fun initRoles() {
-        SchemaUtils.create(Roles)
+        SchemaUtils.create(RoleTable)
         val roles = listOf(
             "Protector",
             "Survivalist",
@@ -65,8 +65,8 @@ object DatabaseFactory {
     }
 
     private suspend fun initSkillInfo() {
-        SchemaUtils.create(SkillInfos)
-        SchemaUtils.create(SkillInfoPrerequisites)
+        SchemaUtils.create(SkillInfoTable)
+        SchemaUtils.create(SkillInfoPrerequisiteTable)
         val connection = TransactionManager.current().connection
         val statement = connection.createStatement()
         withContext(Dispatchers.IO) {
