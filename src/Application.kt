@@ -16,6 +16,7 @@ import io.ktor.sessions.*
 import io.ktor.features.*
 import io.ktor.auth.*
 import io.ktor.jackson.jackson
+import kotlinx.coroutines.launch
 
 fun main(args: Array<String>): Unit {
     io.ktor.server.netty.EngineMain.main(args)
@@ -79,7 +80,9 @@ fun Application.module(testing: Boolean = false) {
 
         }
     }
-    DatabaseFactory.init()
+    launch {
+        DatabaseFactory.init()
+        }
 }
 
 data class IndexData(val items: List<Int>)

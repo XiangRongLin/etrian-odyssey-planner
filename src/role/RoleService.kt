@@ -4,6 +4,7 @@ import com.kaiserpudding.DatabaseFactory.dbQuery
 import com.kaiserpudding.model.Role
 import com.kaiserpudding.model.Roles
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 
@@ -14,7 +15,12 @@ class RoleService {
     }
 
     private fun toClass(row: ResultRow): Role = Role(
-        id = row[Roles.id],
         name = row[Roles.name]
     )
+
+    suspend fun insertAll(roleNames: Iterable<String>) {
+        Roles.batchInsert(roleNames) { name ->
+            this[Roles.name] = name
+        }
+    }
 }

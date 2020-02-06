@@ -2,38 +2,33 @@ package com.kaiserpudding
 
 import com.kaiserpudding.model.Characters
 import com.kaiserpudding.model.Roles
+import com.kaiserpudding.role.RoleService
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.batchInsert
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import org.jetbrains.exposed.sql.transactions.transaction
 
 object DatabaseFactory {
 
     suspend fun <T> dbQuery(block: suspend () -> T): T =
         newSuspendedTransaction { block() }
 
-    fun init() {
+    suspend fun init() {
         val config = HikariConfig("resources/hikari.properties")
         val dataSource = HikariDataSource(config)
         Database.connect(dataSource)
-        transaction {
-            initCharacters()
-            initRoles()
+        dbQuery {
+//            initCharacters()
+//            initRoles()
         }
     }
 
-    private fun initCharacters() {
+    private suspend fun initCharacters() {
         SchemaUtils.create(Characters)
-        Characters.insert {
-            it[name] = "Ori"
-        }
     }
 
-    private fun initRoles() {
+    private suspend fun initRoles() {
         SchemaUtils.create(Roles)
         val roles = listOf(
             "Protector",
@@ -57,8 +52,6 @@ object DatabaseFactory {
             "Hero",
             "Vampire"
         )
-        Roles.batchInsert(roles) {
-            this[Roles.name] = it
-        }
+        RoleService().insertAll(roles)
     }
 }
