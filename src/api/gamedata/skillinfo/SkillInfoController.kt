@@ -7,16 +7,16 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.route
 
-fun Route.skillInfo(repository: SkillInfoRepository) {
+fun Route.skillInfo(service: SkillInfoService) {
     route("api/skill-info") {
 
         get("/") {
-            call.respond(SkillInfoRepository.getAll())
+            call.respond(service.getAll())
         }
 
         get("/{id}") {
             val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Missing id")
-            val skillInfo = SkillInfoRepository.get(id)
+            val skillInfo = service.get(id)
             if (skillInfo != null) {
                 call.respond(skillInfo)
             } else {

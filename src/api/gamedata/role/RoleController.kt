@@ -6,11 +6,11 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.route
 
-fun Route.role(repository: RoleRepository) {
+fun Route.role(service: RoleService) {
     route("/api/role") {
 
         get("/") {
-           call.respond(repository.getAll())
+           call.respond(service.getAll())
         }
     }
 }

@@ -1,12 +1,14 @@
 package com.kaiserpudding
 
 import com.fasterxml.jackson.databind.SerializationFeature
-import com.kaiserpudding.api.gamedata.role.RoleRepository
+import com.kaiserpudding.api.gamedata.role.RoleService
 import com.kaiserpudding.api.gamedata.role.role
-import com.kaiserpudding.api.gamedata.skillinfo.SkillInfoRepository
+import com.kaiserpudding.api.gamedata.skillinfo.SkillInfoService
 import com.kaiserpudding.api.gamedata.skillinfo.skillInfo
 import com.kaiserpudding.api.userdata.character.CharacterService
 import com.kaiserpudding.api.userdata.character.character
+import com.kaiserpudding.api.userdata.skill.SkillService
+import com.kaiserpudding.api.userdata.skill.skill
 import com.kaiserpudding.database.DatabaseFactory
 import io.ktor.application.*
 import io.ktor.response.*
@@ -49,8 +51,8 @@ fun Application.module(testing: Boolean = false) {
 
     install(Routing) {
         character(CharacterService())
-        role(RoleRepository)
-        skillInfo(SkillInfoRepository)
+        role(RoleService())
+        skillInfo(SkillInfoService())
     }
 
     routing {
