@@ -1,4 +1,4 @@
-package com.kaiserpudding.role
+package com.kaiserpudding.gamedata.role
 
 import com.kaiserpudding.model.Role
 

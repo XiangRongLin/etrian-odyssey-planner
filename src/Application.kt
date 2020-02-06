@@ -1,10 +1,11 @@
 package com.kaiserpudding
 
 import com.fasterxml.jackson.databind.SerializationFeature
-import com.kaiserpudding.role.RoleRepository
-import com.kaiserpudding.role.role
-import com.kaiserpudding.character.CharacterService
-import com.kaiserpudding.character.character
+import com.kaiserpudding.gamedata.role.RoleRepository
+import com.kaiserpudding.gamedata.role.role
+import com.kaiserpudding.userdata.character.CharacterService
+import com.kaiserpudding.userdata.character.character
+import com.kaiserpudding.database.DatabaseFactory
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.routing.*

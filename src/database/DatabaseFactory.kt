@@ -1,12 +1,20 @@
-package com.kaiserpudding
+package com.kaiserpudding.database
 
-import com.kaiserpudding.model.*
-import com.kaiserpudding.role.RoleService
+import com.kaiserpudding.model.Characters
+import com.kaiserpudding.model.Roles
+import com.kaiserpudding.model.SkillInfoPrerequisites
+import com.kaiserpudding.model.SkillInfos
+import com.kaiserpudding.gamedata.role.RoleService
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import java.nio.file.Files
+import java.nio.file.Paths
 
 object DatabaseFactory {
 
@@ -21,8 +29,7 @@ object DatabaseFactory {
             SchemaUtils.drop(Characters, Roles, SkillInfos, SkillInfoPrerequisites)
             initCharacters()
             initRoles()
-            SchemaUtils.create(SkillInfos)
-            SchemaUtils.create(SkillInfoPrerequisites)
+            initSkillInfo()
         }
     }
 
@@ -55,5 +62,19 @@ object DatabaseFactory {
             "Vampire"
         )
         RoleService().insertAll(roles)
+    }
+
+    private suspend fun initSkillInfo() {
+        SchemaUtils.create(SkillInfos)
+        SchemaUtils.create(SkillInfoPrerequisites)
+        val connection = TransactionManager.current().connection
+        val statement = connection.createStatement()
+        withContext(Dispatchers.IO) {
+            val reader = Files.newBufferedReader(Paths.get("src/database/init/skills.sql"))
+            reader.lines().forEach { query ->
+                statement.execute(query)
+            }
+        }
+
     }
 }

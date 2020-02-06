@@ -1,4 +1,4 @@
-package com.kaiserpudding.character
+package com.kaiserpudding.userdata.character
 
 import com.kaiserpudding.model.Character
 import com.kaiserpudding.model.NewCharacter

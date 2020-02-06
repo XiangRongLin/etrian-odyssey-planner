@@ -1,4 +1,4 @@
-package com.kaiserpudding.init
+package com.kaiserpudding.database.init.src
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -8,11 +8,11 @@ import java.nio.file.Paths
 
 //"([^\"a-zA-Z_])([a-zA-Z_]+):"
 fun main() {
-    val reader = Files.newBufferedReader(Paths.get("src/init/skills.json"))
+    val reader = Files.newBufferedReader(Paths.get("src/database/init/skills.json"))
     val mapper = ObjectMapper()
     val root: JsonNode = mapper.readTree(reader)
 
-    val writer = Files.newBufferedWriter(Paths.get("src/init/skills.sql"))
+    val writer = Files.newBufferedWriter(Paths.get("src/database/init/skills.sql"))
     val skillMap = mutableMapOf<String, Int>()
     var idCounter = 0
     val skillInfoSql = mutableListOf<String>()

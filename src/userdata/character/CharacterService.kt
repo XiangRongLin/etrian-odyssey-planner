@@ -1,6 +1,6 @@
-package com.kaiserpudding.character
+package com.kaiserpudding.userdata.character
 
-import com.kaiserpudding.DatabaseFactory.dbQuery
+import com.kaiserpudding.database.DatabaseFactory.dbQuery
 import com.kaiserpudding.model.Character
 import com.kaiserpudding.model.Characters
 import com.kaiserpudding.model.NewCharacter

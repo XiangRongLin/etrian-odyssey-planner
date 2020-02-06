@@ -1,4 +1,4 @@
-package com.kaiserpudding.role
+package com.kaiserpudding.gamedata.role
 
 import io.ktor.application.call
 import io.ktor.response.respond
