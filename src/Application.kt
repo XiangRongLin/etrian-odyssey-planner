@@ -7,6 +7,8 @@ import com.kaiserpudding.api.gamedata.skillinfo.SkillInfoService
 import com.kaiserpudding.api.gamedata.skillinfo.skillInfo
 import com.kaiserpudding.api.userdata.character.CharacterService
 import com.kaiserpudding.api.userdata.character.character
+import com.kaiserpudding.api.userdata.party.PartyService
+import com.kaiserpudding.api.userdata.party.party
 import com.kaiserpudding.api.userdata.skill.SkillService
 import com.kaiserpudding.api.userdata.skill.skill
 import com.kaiserpudding.database.DatabaseFactory
@@ -54,6 +56,7 @@ fun Application.module(testing: Boolean = false) {
         role(RoleService())
         skillInfo(SkillInfoService())
         skill(SkillService())
+        party(PartyService())
     }
 
     routing {

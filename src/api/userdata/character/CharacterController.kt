@@ -18,12 +18,12 @@ fun Route.character(characterService: CharacterService) {
 
         get("/{id}") {
             val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Missing id")
-                val character = characterService.get(id)
-                if (character != null) {
-                    call.respond(character)
-                } else {
-                    call.respond(HttpStatusCode.NotFound)
-                }
+            val character = characterService.get(id)
+            if (character != null) {
+                call.respond(character)
+            } else {
+                call.respond(HttpStatusCode.NotFound)
+            }
         }
 
         //https://stackoverflow.com/questions/630453/put-vs-post-in-rest

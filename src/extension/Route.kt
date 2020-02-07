@@ -1,4 +1,4 @@
-package com.kaiserpudding.api
+package com.kaiserpudding.extension
 
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call

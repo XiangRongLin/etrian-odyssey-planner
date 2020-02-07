@@ -1,6 +1,6 @@
 package com.kaiserpudding.api.userdata.skill
 
-import com.kaiserpudding.api.request
+import com.kaiserpudding.extension.request
 import com.kaiserpudding.model.NewSkill
 import com.kaiserpudding.model.Skill
 import io.ktor.application.call
