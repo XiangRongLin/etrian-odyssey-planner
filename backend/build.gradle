@@ -2,14 +2,17 @@ buildscript {
     repositories {
         jcenter()
     }
-    
+
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
+
     }
 }
-
+apply plugin: 'java'
 apply plugin: 'kotlin'
 apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 group 'com.kaiserpudding'
 version '0.0.1'
@@ -43,4 +46,13 @@ dependencies {
     implementation 'org.jetbrains.exposed:exposed:0.17.7'
     implementation 'org.postgresql:postgresql:42.2.9'
     implementation 'com.zaxxer:HikariCP:2.7.4'
+}
+
+shadowJar {
+    relocate('resources', '')
+    manifest {
+        attributes(
+                'Main-Class': 'com.kaiserpudding.ApplicationKt'
+        )
+    }
 }

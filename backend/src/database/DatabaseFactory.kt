@@ -25,25 +25,37 @@ object DatabaseFactory {
         val config = HikariConfig("resources/hikari.properties")
         val dataSource = HikariDataSource(config)
         Database.connect(dataSource)
-        dbQuery {
-            SchemaUtils.drop(
-                CharacterTable,
-                RoleTable,
-                SkillInfoTable,
-                SkillInfoPrerequisiteTable,
-                PartyTable,
-                PartyMemberTable
-            )
-            initCharacters()
-            initRoles()
-            initSkillInfo()
-            initSkill()
-            initParty()
-        }
+
+//        dbQuery {
+//            SchemaUtils.drop(
+//                CharacterTable,
+//                RoleTable,
+//                SkillInfoTable,
+//                SkillInfoPrerequisiteTable,
+//                PartyTable,
+//                PartyMemberTable
+//            )
+//            initSchema()
+//
+//            initCharacters()
+//            initRoles()
+//            initSkillInfo()
+//            initSkill()
+//            initParty()
+//        }
+    }
+
+    private fun initSchema() {
+        SchemaUtils.create(CharacterTable)
+        SchemaUtils.create(RoleTable)
+        SchemaUtils.create(SkillInfoTable)
+        SchemaUtils.create(SkillInfoPrerequisiteTable)
+        SchemaUtils.create(SkillTable)
+        SchemaUtils.create(PartyTable)
+        SchemaUtils.create(PartyMemberTable)
     }
 
     private suspend fun initCharacters() {
-        SchemaUtils.create(CharacterTable)
         val service = CharacterService()
         service.create(NewCharacter(null, name = "Ori"))
         service.create(NewCharacter(null, "braum"))
@@ -51,7 +63,6 @@ object DatabaseFactory {
     }
 
     private suspend fun initRoles() {
-        SchemaUtils.create(RoleTable)
         val roles = listOf(
             "Protector",
             "Survivalist",
@@ -78,12 +89,10 @@ object DatabaseFactory {
     }
 
     private suspend fun initSkillInfo() {
-        SchemaUtils.create(SkillInfoTable)
-        SchemaUtils.create(SkillInfoPrerequisiteTable)
         val connection = TransactionManager.current().connection
         val statement = connection.createStatement()
         withContext(Dispatchers.IO) {
-            val reader = Files.newBufferedReader(Paths.get("src/database/init/skills.sql"))
+            val reader = Files.newBufferedReader(Paths.get("sql/skills.sql"))
             reader.lines().forEach { query ->
                 statement.execute(query)
             }
@@ -91,12 +100,9 @@ object DatabaseFactory {
     }
 
     private suspend fun initSkill() {
-        SchemaUtils.create(SkillTable)
     }
 
     private suspend fun initParty() {
-        SchemaUtils.create(PartyTable)
-        SchemaUtils.create(PartyMemberTable)
         val service = PartyService()
         service.create(NewParty(null, "Death End"))
         service.create(NewParty(null, "party 2"))

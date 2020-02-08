@@ -12,7 +12,7 @@ fun main() {
     val mapper = ObjectMapper()
     val root: JsonNode = mapper.readTree(reader)
 
-    val writer = Files.newBufferedWriter(Paths.get("src/database/init/skills.sql"))
+    val writer = Files.newBufferedWriter(Paths.get("resources/sql/skills.sql"))
     val skillMap = mutableMapOf<String, Int>()
     var idCounter = 0
     val skillInfoSql = mutableListOf<String>()
