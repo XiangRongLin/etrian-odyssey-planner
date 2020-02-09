@@ -1,0 +1,37 @@
+﻿Fleuret;11;11;;No;;;35;10
+Panzerstecher;15;15;;No;;;65;26
+Blind Tuck;10;10;20% Blind Chance;No;;Blind Tuck x1;100;40
+Small Sword;20;20;INT Up Rank 1;Yes;Copper x4;Small Tooth x1;260;104
+Pallasch;23;23;VIT Up Rank 1;Yes;Copper x4;Armor Tail x1;440;176
+Telek;26;26;TP Up Rank 1;Yes;Copper x4;Constricting Vine x1, Tiger Fang x1;590;236
+Scorpio Sword;35;26;8% Sleep Chance, 8% Poison Chance;No;;Toxic Barb x1;880;352
+Rapier;32;32;HP Up Rank 1;Yes;Copper x4;Mountain Claw x1, Green Thorn x1;1390;556
+Feather Fleuret;34;34;VIT Up Rank 3;Yes;Copper x5;Turkey Feather x1, Ferberite x1;2150;860
+Bilbo;37;37;AGI Up Rank 3;Yes;Copper x5;Flaming Tail x1;2600;1040
+Choking Rapier;40;45;Hanging;Yes;Silver x2;Pierced Whirl x1;3500;1400
+Espada Ropera;41;42;STR Up Rank 2;Yes;Copper x5;Malachite x2;4650;1860
+Piercing Tongue;57;41;Vertigo Lash;No;;Vibrant Tongue x1;6000;2400
+Crimson Tuck;59;50;+25 HP;No;;Red Horn Shard x1;7100;2840
+Backsword;54;54;TP Up Rank 3;Yes;Copper x5;Rat Needle x2;8450;3380
+Blue Fleuret;57;57;VIT Up Rank 3;Yes;Copper x5;Muscled Arm x1, Indigo Pith x1;11600;4640
+Moralltach;60;40;Full Thrust;Yes;Gold x4;Magnetite x1;15500;6200
+Verdun;63;63;AGI Up Rank 3;Yes;Copper x6;Metallic Wing x3;18700;7480
+Tree Pallasch;67;67;TP Up Rank 3;Yes;Copper x6;Triangular Trunk x2;22500;9000
+Musketeer;70;70;WIS Up Rank 3;Yes;Copper x6;Glassy Eye x1;26500;10600
+Steelbug's Piercer;80;80;Rest;No;;Beetle Leg x1;30500;12200
+Baboon Rapier;75;75;HP Up Rank 3;Yes;Copper x6;Thick Bone x1;33500;13400
+Evil Eye's Piercer;86;86;+16 AGI;No;;Crystal Lens x1;37500;15000
+Struggle;83;83;VIT Up Rank 3;Yes;Copper x6;Hard Shard x2;44500;17800
+Faerie's Needle;88;88;TP Up Rank 3;Yes;Copper x6;Faerie Wings x1, Sand Twig x1;54500;21800
+Hauteclaire;93;93;WIS Up Rank 4;Yes;Copper x6;Collar Fur x2;63000;25200
+Lionclaw Sword;99;99;LUC Up Rank 4;Yes;Copper x6;Lion Claw x1;77000;30800
+Sauro Pallasch;105;105;Hammerhead;Yes;Copper x8;Crushed Horn x1;89500;35800
+Poniard;110;110;AGI Up Rank 4;Yes;Copper x6;Strange Horn x2;99000;39600
+Dune Needle;128;128;Devourer Needle;No;;Tremor Needles x1;106000;42400
+Colichemarde;114;114;TP Up Rank 5;Yes;Copper x6;Ugly Horn x1;118000;47200
+Gorm Glas;123;123;Fear Glint;Yes;Gold x5;Kaleidostone x1;127000;50800
+Egeking;133;133;VIT Up Rank 4;Yes;Copper x8;Pitchblende x2;167000;66800
+Joyeuse;145;170;HP Up Rank 5;Yes;Copper x8;Withered Spine x1;201000;80400
+Zirah Bouk;157;140;LUC Up Rank 4;Yes;Copper x8;Suspicious Leaf x1;239000;95600
+Warped Mechablade;188;188;Delta Block;No;;Battered Armor x1;287000;114800
+The Answerer;215;215;Deathbringer;No;;Golden Plume x1;585000;234000

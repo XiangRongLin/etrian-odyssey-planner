@@ -1,0 +1,2 @@
+armor & weapon : HououinMakise https://gamefaqs.gamespot.com/3ds/236401-etrian-odyssey-nexus/faqs/76142
+skills:  ReinaSakuraba  https://github.com/ReinaSakuraba/EO-Skill-Sim
