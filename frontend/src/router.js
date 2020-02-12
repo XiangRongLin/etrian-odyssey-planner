@@ -10,12 +10,12 @@ export default new Router({
             component: () => import("@/components/Home")
         },
         {
-            path: "party",
+            path: "/party",
             name: "party-list",
             component: () => import("@/components/PartyList")
         },
         {
-            path: "party/:id",
+            path: "/party/:id",
             name: "party",
             component: () => import("@/components/Party"),
             props: true

@@ -9,7 +9,7 @@
         <h3>Party List</h3>
         <div>
             <ul v-for="result in results" v-bind:key="result.id">
-                <router-link :id="result.id" :to="{name : 'party'}">{{result.name}}</router-link>
+                <PartyPreview :id=result.id :name="result.name"></PartyPreview>
             </ul>
         </div>
     </div>
@@ -17,9 +17,11 @@
 
 <script>
     import axios from "axios";
+    import PartyPreview from "@/components/PartyPreview";
 
     export default {
         name: "Party",
+        components: {PartyPreview},
         data() {
             return {
                 results: [],
@@ -45,7 +47,8 @@
                         }
                     }).then(() => this.getParties())
             }
-        }
+        },
+
     }
 </script>
 
