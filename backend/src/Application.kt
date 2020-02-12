@@ -36,6 +36,14 @@ fun Application.module(testing: Boolean = false) {
         templateLoader = ClassTemplateLoader(this::class.java.classLoader, "templates")
     }
 
+    install(CORS) {
+        method(HttpMethod.Options)
+//        header(HttpHeaders.AccessControlAllowHeaders)
+//        header(HttpHeaders.ContentType)
+        header(HttpHeaders.AccessControlAllowOrigin)
+        host("localhost:8081")
+    }
+
     install(Sessions) {
         cookie<MySession>("MY_SESSION") {
             cookie.extensions["SameSite"] = "lax"
