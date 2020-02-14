@@ -1,6 +1,6 @@
 <template>
     <div>
-        <router-link :id="id" :to="partyLink">{{name}}</router-link>
+        <router-link :id=id :to="partyLink">{{name}}</router-link>
     </div>
 </template>
 

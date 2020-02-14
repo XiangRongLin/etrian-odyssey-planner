@@ -16,8 +16,8 @@
 </template>
 
 <script>
-    import axios from "axios";
     import PartyPreview from "@/components/PartyPreview";
+    import {PartyService} from "@/api";
 
     export default {
         name: "Party",
@@ -33,19 +33,12 @@
         },
         methods: {
             async getParties() {
-                axios.get('http://localhost:8080/api/party')
-                    .then(response => (this.results = response.data))
+                PartyService.get().then(response => (this.results = response.data))
             },
             async submitNewParty() {
-                axios.post('http://localhost:8080/api/party',
-                    {
-                        name: this.newName
-                    },
-                    {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    }).then(() => this.getParties())
+                PartyService.create({
+                    name: this.newName
+                }).then(() => this.getParties());
             }
         },
 
