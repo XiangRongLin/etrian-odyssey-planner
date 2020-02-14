@@ -44,10 +44,21 @@ class PartyService {
         PartyTable.deleteWhere { PartyTable.id.eq(id) } > 0
     }
 
-    suspend fun getPartyMembers(partyId: Int): List<PartyMember> = dbQuery {
+    suspend fun getPartyMembers(partyId: Int): List<PartyMemberApi> = dbQuery {
         PartyMemberTable.select { PartyMemberTable.partyId.eq(partyId) }
-            .map { toMember(it) }
+            .map { toMemberApi(it) }
     }
+
+    private fun toMemberApi(row: ResultRow): PartyMemberApi {
+        val character = CharacterTable.select { CharacterTable.id.eq(row[PartyMemberTable.memberId]) }
+            .map { toCharacter(it) }.single()
+        return PartyMemberApi(character, row[PartyMemberTable.position])
+    }
+
+    private fun toCharacter(row: ResultRow): Character = Character(
+        id = row[CharacterTable.id],
+        name = row[CharacterTable.name]
+    )
 
     private fun toMember(row: ResultRow): PartyMember = PartyMember(
         partyId = row[PartyMemberTable.partyId],

@@ -23,6 +23,11 @@ data class PartyMember(
     val position: Position
 )
 
+data class PartyMemberApi(
+    val member: Character,
+    val position: Position
+)
+
 enum class Position {
     FRONT_LEFT,
     FRONT_MIDDLE,
@@ -30,11 +35,4 @@ enum class Position {
     BACK_LEFT,
     BACK_MIDDLE,
     BACK_RIGHT
-}
-
-fun main() {
-    val position : Position = Position.FRONT_LEFT
-    val mapper = ObjectMapper()
-    val json = mapper.writeValueAsString(position)
-    println(json)
 }
