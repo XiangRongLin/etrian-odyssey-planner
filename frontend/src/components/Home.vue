@@ -3,6 +3,8 @@
         <p> asdasdas</p>
         <nav>
             <router-link :to="{name: 'party-list'}">To Party list</router-link>
+            <p></p>
+            <router-link :to="{name: 'character-list'}">To Character list</router-link>
         </nav>
     </div>
 </template>

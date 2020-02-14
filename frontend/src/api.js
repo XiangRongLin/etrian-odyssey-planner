@@ -35,6 +35,14 @@ export const PartyService = {
 
 export const CharacterService = {
     get(id) {
-        return ApiService.get(`character/${id}`)
+        if (typeof id == "undefined") {
+            return ApiService.get(`character`)
+        } else {
+            return ApiService.get(`character/${id}`)
+        }
+    },
+
+    create(data) {
+        return ApiService.post(`character`, data);
     }
 };

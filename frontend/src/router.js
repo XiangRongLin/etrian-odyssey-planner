@@ -19,6 +19,17 @@ export default new Router({
             name: "party",
             component: () => import("@/components/Party"),
             props: true
-        }
+        },
+        {
+            path: "/character",
+            name: "character-list",
+            component: () => import("@/components/CharacterList"),
+        },
+        // {
+        //     path: "/character/:id",
+        //     name: "character",
+        //     component: () => import("@/components/Character"),
+        // },
+
     ]
 })
