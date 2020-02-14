@@ -22,8 +22,8 @@ export default new Router({
         },
         {
             path: "/character",
-            name: "character-list",
-            component: () => import("@/components/CharacterList"),
+            name: "character-overview",
+            component: () => import("@/components/CharacterOverview"),
         },
         // {
         //     path: "/character/:id",
