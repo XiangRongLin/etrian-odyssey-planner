@@ -1,7 +1,9 @@
 <template>
-    <div>
-        <router-link :id=id :to="partyLink">{{name}}</router-link>
-    </div>
+    <md-list-item :id=id :to="partyLink">
+            <span class="md-list-item-text">
+                {{name}}
+            </span>
+    </md-list-item>
 </template>
 
 <script>
@@ -26,5 +28,4 @@
 </script>
 
 <style scoped>
-
 </style>

@@ -11,8 +11,8 @@ export default new Router({
         },
         {
             path: "/party",
-            name: "party-list",
-            component: () => import("@/components/PartyList")
+            name: "party-overview",
+            component: () => import("@/components/PartyOverview")
         },
         {
             path: "/party/:id",

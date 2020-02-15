@@ -1,5 +1,10 @@
 <template>
     <div>
+        <input v-bind="searchValue">
+        <button v-on:click="searchCharacter">search</button>
+        <datalist id="suggestions" v-for="suggestion in suggestions" v-bind:key="suggestion.id">
+            <option>{{suggestion.name}}</option>
+        </datalist>
         <p>{{id}}</p>
         <h3>{{name}}</h3>
         <ul v-for="character in members" v-bind:key="character.id">
@@ -11,7 +16,7 @@
 </template>
 
 <script>
-    import {PartyService} from "@/api";
+    import {CharacterService, PartyService} from "@/api";
 
     export default {
         name: "Party",
@@ -21,7 +26,9 @@
         },
         data() {
             return {
-                members: []
+                members: [],
+                searchValue: String,
+                suggestions: []
             }
         },
         mounted() {
@@ -33,11 +40,21 @@
                     .then(response => {
                         this.members = response.data
                     });
+            },
+            async searchCharacter() {
+                CharacterService.search(this.searchValue)
+                    .then(response =>  {
+                        this.suggestions = response.data
+                    })
             }
         }
     }
 </script>
 
 <style scoped>
-
+    .autocomplete {
+        /*the container must be positioned relative:*/
+        position: relative;
+        display: inline-block;
+    }
 </style>

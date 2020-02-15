@@ -1,8 +1,7 @@
 <template>
     <div>
-        <p> asdasdas</p>
         <nav>
-            <router-link :to="{name: 'party-list'}">To Party list</router-link>
+            <router-link :to="{name: 'party-overview'}">To Party list</router-link>
             <p></p>
             <router-link :to="{name: 'character-overview'}">To Character list</router-link>
         </nav>

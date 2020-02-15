@@ -1,31 +1,30 @@
 <template>
     <div>
-        <div>
-            <h3>New Party</h3>
-            <span>name   </span><input v-model="newName">
-            <button v-on:click="submitNewParty">Submit</button>
-        </div>
-        <br>
-        <h3>Party List</h3>
-        <div>
-            <ul v-for="result in results" v-bind:key="result.id">
-                <PartyPreview :id=result.id :name="result.name"></PartyPreview>
-            </ul>
-        </div>
+        <md-list v-for="result in results" v-bind:key="result.id">
+            <PartyPreview :id=result.id :name="result.name"></PartyPreview>
+        </md-list>
     </div>
 </template>
 
 <script>
+    import PartyAdd from "@/components/PartyAdd";
     import PartyPreview from "@/components/PartyPreview";
     import {PartyService} from "@/api";
 
     export default {
         name: "Party",
-        components: {PartyPreview},
+        components: {PartyAdd, PartyPreview},
+        props: {
+            newParty: Object
+        },
+        watch: {
+            newParty(newValue) {
+                this.results.push(newValue);
+            }
+        },
         data() {
             return {
                 results: [],
-                newName: ''
             }
         },
         mounted() {
@@ -33,12 +32,8 @@
         },
         methods: {
             async getParties() {
-                PartyService.get().then(response => (this.results = response.data))
-            },
-            async submitNewParty() {
-                PartyService.create({
-                    name: this.newName
-                }).then(() => this.getParties());
+                PartyService.get().then(response =>
+                    this.results = response.data)
             }
         },
 
@@ -46,5 +41,4 @@
 </script>
 
 <style scoped>
-
 </style>

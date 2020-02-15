@@ -42,6 +42,10 @@ export const CharacterService = {
         }
     },
 
+    search(name) {
+        return ApiService.get(`character?name=${name}`)
+    },
+
     create(data) {
         return ApiService.post(`character`, data);
     }

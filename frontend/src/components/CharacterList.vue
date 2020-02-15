@@ -27,7 +27,6 @@
         data() {
             return {
                 results: [],
-                newName: ''
             }
         },
         mounted() {
