@@ -25,9 +25,13 @@ class CharacterService {
             .singleOrNull()
     }
 
+    suspend fun searchBy(name: String): List<Character> = dbQuery {
+        CharacterTable.select { CharacterTable.name.like("%$name%") }
+            .map { toCharacter(it) }
+    }
+
     private fun toCharacter(row: ResultRow): Character = Character(
-        id = row[CharacterTable.id],
-        name = row[CharacterTable.name]
+        id = row[CharacterTable.id],        name = row[CharacterTable.name]
     )
 
     suspend fun update(character: Character): Character? = dbQuery {

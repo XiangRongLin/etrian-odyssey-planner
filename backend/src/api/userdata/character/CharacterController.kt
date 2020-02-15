@@ -13,7 +13,13 @@ fun Route.character(characterService: CharacterService) {
     route("api/character") {
 
         get("/") {
-            call.respond(characterService.getAll())
+            val parameters = call.request.queryParameters
+            val name = parameters["name"]
+            if(name.isNullOrEmpty()) {
+                call.respond(characterService.getAll())
+            } else {
+                call.respond(characterService.searchBy(name))
+            }
         }
 
         get("/{id}") {
