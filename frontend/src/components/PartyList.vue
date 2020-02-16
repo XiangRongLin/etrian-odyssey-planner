@@ -1,5 +1,8 @@
 <template>
     <div>
+        <md-toolbar :md-elevation="1">
+            <span class="md-title">Party list</span>
+        </md-toolbar>
         <md-list v-for="result in results" v-bind:key="result.id">
             <PartyPreview :id=result.id :name="result.name"></PartyPreview>
         </md-list>
