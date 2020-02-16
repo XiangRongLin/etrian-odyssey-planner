@@ -5,21 +5,20 @@
         <datalist id="suggestions" v-for="suggestion in suggestions" v-bind:key="suggestion.id">
             <option>{{suggestion.name}}</option>
         </datalist>
-        <p>{{id}}</p>
+        <p>party id {{id}}</p>
         <h3>{{name}}</h3>
-        <ul v-for="character in members" v-bind:key="character.id">
-            <div>
-                <p>Name: {{character.member.name}} || Position: {{character.position}}</p>
-            </div>
-        </ul>
+        <PartyMemberList :party-id=id></PartyMemberList>
     </div>
 </template>
 
 <script>
     import {CharacterService, PartyService} from "@/api";
+    import CharacterList from "@/components/CharacterList";
+    import PartyMemberList from "@/components/PartyMemberList";
 
     export default {
         name: "Party",
+        components: {PartyMemberList, CharacterList},
         props: {
             id: Number,
             name: String
@@ -31,16 +30,7 @@
                 suggestions: []
             }
         },
-        mounted() {
-            this.getMembers()
-        },
         methods: {
-            async getMembers() {
-                PartyService.getMembers(this.id)
-                    .then(response => {
-                        this.members = response.data
-                    });
-            },
             async searchCharacter() {
                 CharacterService.search(this.searchValue)
                     .then(response =>  {
