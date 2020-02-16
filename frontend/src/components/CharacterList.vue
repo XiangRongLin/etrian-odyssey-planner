@@ -1,11 +1,11 @@
 <template>
     <div>
-        <h3>Character List</h3>
-        <div>
-            <ul v-for="result in results" v-bind:key="result.id">
-                <CharacterPreview :id=result.id :name="result.name"></CharacterPreview>
-            </ul>
-        </div>
+        <md-toolbar :md-elevation="1">
+            <span class="md-title">Character list</span>
+        </md-toolbar>
+        <md-list v-for="result in results" v-bind:key="result.id">
+            <CharacterPreview :id=result.id :name="result.name"></CharacterPreview>
+        </md-list>
     </div>
 </template>
 
