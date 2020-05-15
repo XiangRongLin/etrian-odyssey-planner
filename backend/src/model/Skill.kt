@@ -5,7 +5,7 @@ import org.jetbrains.exposed.sql.Table
 
 object SkillTable: Table("skills") {
     val id = integer("id").primaryKey().uniqueIndex().autoIncrement()
-    val skillInfoId = integer("skill_info_id").references(SkillInfoTable.id, onDelete = ReferenceOption.CASCADE)
+    val skillInfoId = integer("skill_info_id").references(SkillInfoTable.id)
     val level = integer("level")
     val characterId = integer("character_id").references(CharacterTable.id, onDelete = ReferenceOption.CASCADE)
 }
