@@ -3,7 +3,7 @@ package com.kaiserpudding.model
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
 
-object SkillTable: Table("skill") {
+object SkillTable: Table("skills") {
     val id = integer("id").primaryKey().uniqueIndex().autoIncrement()
     val skillInfoId = integer("skill_info_id").references(SkillInfoTable.id, onDelete = ReferenceOption.CASCADE)
     val level = integer("level")
