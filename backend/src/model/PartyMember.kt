@@ -5,9 +5,9 @@ import org.jetbrains.exposed.sql.Table
 
 object PartyMemberTable : Table("party_members") {
     val partyId = integer("party_id").index()
-        .references(PartyTable.id, onDelete = ReferenceOption.CASCADE)
+        .references(PartyTable.id, onUpdate = ReferenceOption.CASCADE, onDelete = ReferenceOption.CASCADE)
     val memberId = integer("member_id")
-        .references(CharacterTable.id, onDelete = ReferenceOption.CASCADE)
+        .references(CharacterTable.id, onUpdate = ReferenceOption.CASCADE, onDelete = ReferenceOption.CASCADE)
     val position = enumerationByName("position", 15, Position::class)
 
     init {
