@@ -11,6 +11,7 @@ class CharacterService {
     suspend fun create(character: NewCharacter): Int = dbQuery {
         CharacterTable.insert {
             it[name] = character.name
+            it[role] = character.role
         }[CharacterTable.id]
     }
 
@@ -31,7 +32,9 @@ class CharacterService {
     }
 
     private fun toCharacter(row: ResultRow): Character = Character(
-        id = row[CharacterTable.id],        name = row[CharacterTable.name]
+        id = row[CharacterTable.id],
+        name = row[CharacterTable.name],
+        role = row[CharacterTable.role]
     )
 
     suspend fun update(character: Character): Character? = dbQuery {

@@ -28,19 +28,23 @@ object DatabaseFactory {
 
 //        dbQuery {
 //            SchemaUtils.drop(
+//                PartyTable,
+//                PartyMemberTable,
 //                CharacterTable,
-//                RoleTable,
+//                SkillTable,
 //                SkillInfoTable,
 //                SkillInfoPrerequisiteTable,
-//                PartyTable,
-//                PartyMemberTable
+//                RoleTable
 //            )
 //            initSchema()
 //
-//            initCharacters()
 //            initRoles()
 //            initSkillInfo()
+//        }
+//
+//        dbQuery {
 //            initSkill()
+//            initCharacters()
 //            initParty()
 //        }
     }
@@ -53,13 +57,6 @@ object DatabaseFactory {
         SchemaUtils.create(SkillTable)
         SchemaUtils.create(PartyTable)
         SchemaUtils.create(PartyMemberTable)
-    }
-
-    private suspend fun initCharacters() {
-        val service = CharacterService()
-        service.create(NewCharacter(null, name = "Ori"))
-        service.create(NewCharacter(null, "braum"))
-        service.create(NewCharacter(null, "vayne"))
     }
 
     private suspend fun initRoles() {
@@ -100,6 +97,13 @@ object DatabaseFactory {
     }
 
     private suspend fun initSkill() {
+    }
+
+    private suspend fun initCharacters() {
+        val service = CharacterService()
+        service.create(NewCharacter(null, "Ori", "Protector"))
+        service.create(NewCharacter(null, "braum", "Landsknecht"))
+        service.create(NewCharacter(null, "vayne", "Hero"))
     }
 
     private suspend fun initParty() {

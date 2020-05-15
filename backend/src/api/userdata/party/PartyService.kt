@@ -57,7 +57,8 @@ class PartyService {
 
     private fun toCharacter(row: ResultRow): Character = Character(
         id = row[CharacterTable.id],
-        name = row[CharacterTable.name]
+        name = row[CharacterTable.name],
+        role = row[CharacterTable.role]
     )
 
     private fun toMember(row: ResultRow): PartyMember = PartyMember(

@@ -1,6 +1,5 @@
 package com.kaiserpudding.model
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
 
