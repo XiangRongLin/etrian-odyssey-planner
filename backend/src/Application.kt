@@ -12,20 +12,33 @@ import com.kaiserpudding.api.userdata.party.party
 import com.kaiserpudding.api.userdata.skill.SkillService
 import com.kaiserpudding.api.userdata.skill.skill
 import com.kaiserpudding.database.DatabaseFactory
-import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.routing.*
-import io.ktor.http.*
-import freemarker.cache.*
-import io.ktor.freemarker.*
-import io.ktor.http.content.*
-import io.ktor.sessions.*
-import io.ktor.features.*
-import io.ktor.auth.*
+import com.kaiserpudding.database.DatabaseMigrations
+import freemarker.cache.ClassTemplateLoader
+import io.ktor.application.Application
+import io.ktor.application.call
+import io.ktor.application.install
+import io.ktor.auth.Authentication
+import io.ktor.features.CORS
+import io.ktor.features.ContentNegotiation
+import io.ktor.features.StatusPages
+import io.ktor.freemarker.FreeMarker
+import io.ktor.freemarker.FreeMarkerContent
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.content.resources
+import io.ktor.http.content.static
 import io.ktor.jackson.jackson
-import kotlinx.coroutines.launch
+import io.ktor.response.respond
+import io.ktor.response.respondText
+import io.ktor.routing.Routing
+import io.ktor.routing.get
+import io.ktor.routing.routing
+import io.ktor.sessions.*
+import kotlin.collections.set
 
-fun main(args: Array<String>): Unit {
+fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
 }
 
@@ -98,9 +111,8 @@ fun Application.module(testing: Boolean = false) {
 
         }
     }
-    launch {
-        DatabaseFactory.init()
-        }
+    DatabaseMigrations.migrate()
+    DatabaseFactory.init()
 }
 
 data class IndexData(val items: List<Int>)

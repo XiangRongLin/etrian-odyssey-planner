@@ -7,4 +7,4 @@
 *.iws
 
 uml/images/
-resources/hikari.properties
+resources/database/config/hikari.properties
