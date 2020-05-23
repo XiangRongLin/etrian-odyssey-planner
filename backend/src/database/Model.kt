@@ -76,4 +76,8 @@ object SkillTable : Table("skills") {
         onUpdate = ReferenceOption.CASCADE,
         onDelete = ReferenceOption.CASCADE
     )
+
+    init {
+        SkillTable.uniqueIndex(skillInfoId, characterId)
+    }
 }
