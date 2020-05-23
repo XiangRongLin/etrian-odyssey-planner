@@ -1,23 +1,37 @@
 package com.kaiserpudding.api.gamedata.skillinfo
 
+import com.kaiserpudding.api.gamedata.role.Role
 import com.kaiserpudding.database.DatabaseFactory.dbQuery
-import com.kaiserpudding.model.*
+import com.kaiserpudding.database.SkillInfoPrerequisiteTable
+import com.kaiserpudding.database.SkillInfoTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 
 class SkillInfoService {
 
-    suspend fun getAll(): List<SkillInfo> = dbQuery {
-        SkillInfoTable.selectAll().map { toSkillInfo(it) }
+    suspend fun getAll(): List<SkillInfo> {
+        return dbQuery {
+            SkillInfoTable.selectAll().map { toSkillInfo(it) }
+        }
     }
 
-    suspend fun get(id: Int): SkillInfo? = dbQuery {
-        SkillInfoTable
-            .select { SkillInfoTable.id eq id }
-            .limit(1)
-            .mapNotNull { toSkillInfo(it) }
-            .singleOrNull()
+    suspend fun getByRole(role: Role): List<SkillInfo> {
+        return dbQuery {
+            SkillInfoTable
+                .select { SkillInfoTable.roleName eq role.name }
+                .mapNotNull { toSkillInfo(it) }
+        }
+    }
+
+    suspend fun get(id: Int): SkillInfo? {
+        return dbQuery {
+            SkillInfoTable
+                .select { SkillInfoTable.id eq id }
+                .limit(1)
+                .mapNotNull { toSkillInfo(it) }
+                .singleOrNull()
+        }
     }
 
     private suspend fun toSkillInfo(row: ResultRow): SkillInfo {
@@ -31,15 +45,20 @@ class SkillInfoService {
         )
     }
 
-    private suspend fun getPrerequisite(id: Int): List<SkillInfoPrerequisite>? = dbQuery {
-        SkillInfoPrerequisiteTable
-            .select { SkillInfoPrerequisiteTable.skillInfoId eq id }
-            .map { toPrerequisite(it) }
+    private suspend fun getPrerequisite(id: Int): List<SkillInfoPrerequisite>? {
+        return dbQuery {
+            SkillInfoPrerequisiteTable
+                .select { SkillInfoPrerequisiteTable.skillInfoId eq id }
+                .map { toPrerequisite(it) }
+        }
     }
 
-    private fun toPrerequisite(row: ResultRow): SkillInfoPrerequisite =
-        SkillInfoPrerequisite(
-            prerequisiteId = row[SkillInfoPrerequisiteTable.prerequisiteId],
-            prerequisiteLevel = row[SkillInfoPrerequisiteTable.prerequisiteLevel]
+    private fun toPrerequisite(row: ResultRow): SkillInfoPrerequisite {
+        return SkillInfoPrerequisite(
+            id = row[SkillInfoPrerequisiteTable.prerequisiteId],
+            level = row[SkillInfoPrerequisiteTable.prerequisiteLevel]
         )
+    }
+
+
 }

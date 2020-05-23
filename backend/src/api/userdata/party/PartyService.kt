@@ -1,13 +1,21 @@
 package com.kaiserpudding.api.userdata.party
 
+import com.kaiserpudding.api.model.PartyMember
+import com.kaiserpudding.api.model.PartyMemberApi
+import com.kaiserpudding.api.userdata.character.Character
+import com.kaiserpudding.database.CharacterTable
 import com.kaiserpudding.database.DatabaseFactory.dbQuery
+import com.kaiserpudding.database.PartyMemberTable
+import com.kaiserpudding.database.PartyTable
 import com.kaiserpudding.extension.upsert
-import com.kaiserpudding.model.*
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.InsertStatement
-import org.postgresql.util.PSQLException
-import java.lang.Exception
+import org.jetbrains.exposed.sql.update
 
 class PartyService {
 
@@ -28,10 +36,11 @@ class PartyService {
             .singleOrNull()
     }
 
-    private fun toParty(row: ResultRow): Party = Party(
-        id = row[PartyTable.id],
-        name = row[PartyTable.name]
-    )
+    private fun toParty(row: ResultRow): Party =
+        Party(
+            id = row[PartyTable.id],
+            name = row[PartyTable.name]
+        )
 
     suspend fun update(party: Party): Party? = dbQuery {
         PartyTable.update({ PartyTable.id.eq(party.id) }) {
@@ -52,20 +61,25 @@ class PartyService {
     private fun toMemberApi(row: ResultRow): PartyMemberApi {
         val character = CharacterTable.select { CharacterTable.id.eq(row[PartyMemberTable.memberId]) }
             .map { toCharacter(it) }.single()
-        return PartyMemberApi(character, row[PartyMemberTable.position])
+        return PartyMemberApi(
+            character,
+            row[PartyMemberTable.position]
+        )
     }
 
-    private fun toCharacter(row: ResultRow): Character = Character(
-        id = row[CharacterTable.id],
-        name = row[CharacterTable.name],
-        role = row[CharacterTable.role]
-    )
+    private fun toCharacter(row: ResultRow): Character =
+        Character(
+            id = row[CharacterTable.id],
+            name = row[CharacterTable.name],
+            role = row[CharacterTable.role]
+        )
 
-    private fun toMember(row: ResultRow): PartyMember = PartyMember(
-        partyId = row[PartyMemberTable.partyId],
-        memberId = row[PartyMemberTable.memberId],
-        position = row[PartyMemberTable.position]
-    )
+    private fun toMember(row: ResultRow): PartyMember =
+        PartyMember(
+            partyId = row[PartyMemberTable.partyId],
+            memberId = row[PartyMemberTable.memberId],
+            position = row[PartyMemberTable.position]
+        )
 
     suspend fun upsertMember(member: PartyMember) = dbQuery {
         PartyMemberTable.upsert(PartyMemberTable.partyId, PartyMemberTable.memberId) {

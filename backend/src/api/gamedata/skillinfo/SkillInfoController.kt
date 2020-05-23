@@ -1,5 +1,6 @@
 package com.kaiserpudding.api.gamedata.skillinfo
 
+import com.kaiserpudding.api.gamedata.role.Role
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
@@ -11,7 +12,12 @@ fun Route.skillInfo(service: SkillInfoService) {
     route("api/skill-info") {
 
         get("/") {
-            call.respond(service.getAll())
+            val role: String? = call.parameters["role"]
+            if (role == null) {
+                call.respond(service.getAll())
+            } else {
+                call.respond(service.getByRole(Role(role)))
+            }
         }
 
         get("/{id}") {

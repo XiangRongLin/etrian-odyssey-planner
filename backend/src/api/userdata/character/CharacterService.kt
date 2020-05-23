@@ -1,10 +1,13 @@
 package com.kaiserpudding.api.userdata.character
 
+import com.kaiserpudding.database.CharacterTable
 import com.kaiserpudding.database.DatabaseFactory.dbQuery
-import com.kaiserpudding.model.Character
-import com.kaiserpudding.model.CharacterTable
-import com.kaiserpudding.model.NewCharacter
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.update
 
 class CharacterService {
 
@@ -31,11 +34,12 @@ class CharacterService {
             .map { toCharacter(it) }
     }
 
-    private fun toCharacter(row: ResultRow): Character = Character(
-        id = row[CharacterTable.id],
-        name = row[CharacterTable.name],
-        role = row[CharacterTable.role]
-    )
+    private fun toCharacter(row: ResultRow): Character =
+        Character(
+            id = row[CharacterTable.id],
+            name = row[CharacterTable.name],
+            role = row[CharacterTable.role]
+        )
 
     suspend fun update(character: Character): Character? = dbQuery {
         CharacterTable.update({ CharacterTable.id eq character.id }) {

@@ -1,11 +1,14 @@
 package com.kaiserpudding.api.userdata.skill
 
 import com.kaiserpudding.database.DatabaseFactory.dbQuery
-import com.kaiserpudding.model.NewSkill
-import com.kaiserpudding.model.Skill
-import com.kaiserpudding.model.SkillInfoTable
-import com.kaiserpudding.model.SkillTable
-import org.jetbrains.exposed.sql.*
+import com.kaiserpudding.database.SkillInfoTable
+import com.kaiserpudding.database.SkillTable
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.innerJoin
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.update
 
 class SkillService {
 
@@ -33,12 +36,13 @@ class SkillService {
             .mapNotNull { toSkill(it) }
     }
 
-    private fun toSkill(row: ResultRow): Skill = Skill(
-        id = row[SkillTable.id],
-        skillInfoId = row[SkillTable.skillInfoId],
-        level = row[SkillTable.level],
-        characterId = row[SkillTable.characterId]
-    )
+    private fun toSkill(row: ResultRow): Skill =
+        Skill(
+            id = row[SkillTable.id],
+            skillInfoId = row[SkillTable.skillInfoId],
+            level = row[SkillTable.level],
+            characterId = row[SkillTable.characterId]
+        )
 
     suspend fun update(skill: Skill): Skill? = dbQuery {
         SkillTable.update({ SkillTable.id eq skill.id }) {
