@@ -10,7 +10,6 @@ import com.kaiserpudding.api.userdata.character.character
 import com.kaiserpudding.api.userdata.party.PartyService
 import com.kaiserpudding.api.userdata.party.party
 import com.kaiserpudding.api.userdata.skill.SkillService
-import com.kaiserpudding.api.userdata.skill.skill
 import com.kaiserpudding.database.DatabaseFactory
 import com.kaiserpudding.database.DatabaseMigrations
 import freemarker.cache.ClassTemplateLoader
@@ -40,7 +39,6 @@ import io.ktor.sessions.cookie
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.sessions.set
-import java.lang.NumberFormatException
 import kotlin.collections.set
 
 fun main(args: Array<String>) {
@@ -78,10 +76,9 @@ fun Application.module(testing: Boolean = false) {
     }
 
     install(Routing) {
-        character(CharacterService())
         role(RoleService())
         skillInfo(SkillInfoService())
-        skill(SkillService())
+        character(CharacterService(), SkillService())
         party(PartyService())
     }
 

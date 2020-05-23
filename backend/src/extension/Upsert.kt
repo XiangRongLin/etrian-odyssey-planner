@@ -24,7 +24,6 @@ class Upsert<Key: Any>(
         val tm = TransactionManager.current()
         val updateSetter = table.columns.joinToString { "${tm.identity(it)} = EXCLUDED.${tm.identity(it)}" }
         val onConflict = "ON CONFLICT (${keys.joinToString { tm.identity(it) }}) DO UPDATE SET $updateSetter"
-        val a = "${super.prepareSQL(transaction)} $onConflict"
-        return a
+        return "${super.prepareSQL(transaction)} $onConflict"
     }
 }

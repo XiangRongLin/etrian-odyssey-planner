@@ -29,6 +29,14 @@ class CharacterService {
             .singleOrNull()
     }
 
+
+    suspend fun getNonNullable(id: Int): Character = dbQuery {
+        CharacterTable.select { CharacterTable.id eq id }
+            .limit(1)
+            .map { toCharacter(it) }
+            .single()
+    }
+
     suspend fun searchBy(name: String): List<Character> = dbQuery {
         CharacterTable.select { CharacterTable.name.like("%$name%") }
             .map { toCharacter(it) }
