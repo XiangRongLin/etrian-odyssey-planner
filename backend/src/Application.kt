@@ -35,7 +35,12 @@ import io.ktor.response.respondText
 import io.ktor.routing.Routing
 import io.ktor.routing.get
 import io.ktor.routing.routing
-import io.ktor.sessions.*
+import io.ktor.sessions.Sessions
+import io.ktor.sessions.cookie
+import io.ktor.sessions.get
+import io.ktor.sessions.sessions
+import io.ktor.sessions.set
+import java.lang.NumberFormatException
 import kotlin.collections.set
 
 fun main(args: Array<String>) {
@@ -102,6 +107,12 @@ fun Application.module(testing: Boolean = false) {
 
 
         install(StatusPages) {
+            exception<NumberFormatException> { cause ->
+                call.respond(HttpStatusCode.BadRequest)
+            }
+            exception<IllegalStateException> { cause ->
+                call.respond(HttpStatusCode.BadRequest)
+            }
             exception<AuthenticationException> { cause ->
                 call.respond(HttpStatusCode.Unauthorized)
             }
