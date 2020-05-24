@@ -1,11 +1,9 @@
-CREATE TABLE roles
-(
+CREATE TABLE roles (
     name varchar(15) NOT NULL,
     CONSTRAINT roles_pkey PRIMARY KEY (name)
 );
 
-CREATE TABLE skill_infos
-(
+CREATE TABLE skill_infos (
     id          int4         NOT NULL,
     role_name   varchar(15)  NOT NULL,
     name        varchar(30)  NOT NULL,
@@ -15,8 +13,7 @@ CREATE TABLE skill_infos
     CONSTRAINT fk_skill_infos_role_name_name FOREIGN KEY (role_name) REFERENCES roles (name) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
-CREATE TABLE skill_info_prerequisites
-(
+CREATE TABLE skill_info_prerequisites (
     skill_info_id      int4 NOT NULL,
     prerequisite_id    int4 NOT NULL,
     prerequisite_level int4 NOT NULL,
@@ -25,8 +22,7 @@ CREATE TABLE skill_info_prerequisites
 );
 CREATE INDEX skill_info_prerequisites_skill_info_id ON skill_info_prerequisites USING btree (skill_info_id);
 
-CREATE TABLE characters
-(
+CREATE TABLE characters (
     id   serial      NOT NULL,
     name VARCHAR(30) NOT NULL,
     role VARCHAR(15) NOT NULL,
@@ -34,8 +30,7 @@ CREATE TABLE characters
     CONSTRAINT fk_characters_role_name FOREIGN KEY (role) REFERENCES roles (name) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
-CREATE TABLE skills
-(
+CREATE TABLE skills (
     id            serial NOT NULL,
     skill_info_id INT4   NOT NULL,
     level         INT4   NOT NULL,
@@ -45,15 +40,13 @@ CREATE TABLE skills
     CONSTRAINT fk_skills_skill_info_id_id FOREIGN KEY (skill_info_id) REFERENCES skill_infos (id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
-CREATE TABLE parties
-(
+CREATE TABLE parties (
     id   serial      NOT NULL,
     name VARCHAR(20) NOT NULL,
     CONSTRAINT parties_id_unique UNIQUE (id)
 );
 
-CREATE TABLE party_members
-(
+CREATE TABLE party_members (
     party_id  INT4        NOT NULL,
     member_id INT4        NOT NULL,
     position  VARCHAR(15) NOT NULL,

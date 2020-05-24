@@ -1,42 +1,42 @@
 -- noinspection SqlResolveForFile
 
 INSERT INTO roles (name)
-VALUES ('Protector');
+    VALUES ('Protector');
 INSERT INTO roles (name)
-VALUES ('Survivalist');
+    VALUES ('Survivalist');
 INSERT INTO roles (name)
-VALUES ('Medic');
+    VALUES ('Medic');
 INSERT INTO roles (name)
-VALUES ('Ronin');
+    VALUES ('Ronin');
 INSERT INTO roles (name)
-VALUES ('War Magus');
+    VALUES ('War Magus');
 INSERT INTO roles (name)
-VALUES ('Gunner');
+    VALUES ('Gunner');
 INSERT INTO roles (name)
-VALUES ('Zodiac');
+    VALUES ('Zodiac');
 INSERT INTO roles (name)
-VALUES ('Farmer');
+    VALUES ('Farmer');
 INSERT INTO roles (name)
-VALUES ('Ninja');
+    VALUES ('Ninja');
 INSERT INTO roles (name)
-VALUES ('Sovereign');
+    VALUES ('Sovereign');
 INSERT INTO roles (name)
-VALUES ('Shogun');
+    VALUES ('Shogun');
 INSERT INTO roles (name)
-VALUES ('Nightseeker');
+    VALUES ('Nightseeker');
 INSERT INTO roles (name)
-VALUES ('Landsknecht');
+    VALUES ('Landsknecht');
 INSERT INTO roles (name)
-VALUES ('Arcanist');
+    VALUES ('Arcanist');
 INSERT INTO roles (name)
-VALUES ('Imperial');
+    VALUES ('Imperial');
 INSERT INTO roles (name)
-VALUES ('Highlander');
+    VALUES ('Highlander');
 INSERT INTO roles (name)
-VALUES ('Harbinger');
+    VALUES ('Harbinger');
 INSERT INTO roles (name)
-VALUES ('Pugilist');
+    VALUES ('Pugilist');
 INSERT INTO roles (name)
-VALUES ('Hero');
+    VALUES ('Hero');
 INSERT INTO roles (name)
-VALUES ('Vampire');
+    VALUES ('Vampire');
