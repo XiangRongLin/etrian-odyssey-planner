@@ -1,10 +1,11 @@
 package com.kaiserpudding.api
 
-import com.kaiserpudding.api.userdata.character.CharacterService
 import com.kaiserpudding.api.userdata.character.NewCharacter
-import com.kaiserpudding.api.userdata.party.PartyService
 import com.kaiserpudding.api.userdata.skill.NewSkill
-import com.kaiserpudding.api.userdata.skill.SkillService
+import com.kaiserpudding.repository.AbstractRepository
+import com.kaiserpudding.repository.CharacterRepository
+import com.kaiserpudding.repository.PartyRepository
+import com.kaiserpudding.repository.SkillRepository
 import kotlinx.coroutines.runBlocking
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
@@ -29,8 +30,8 @@ fun initDatabase() {
 
 fun initUserData() {
     runBlocking {
-        val characterService = getService(CharacterService::class.java)
-        val skillService = getService(SkillService::class.java)
+        val characterService = getRepository(CharacterRepository::class.java)
+        val skillService = getRepository(SkillRepository::class.java)
         val character = characterService.create(NewCharacter("name", "Hero"))
         skillService.create(character, NewSkill(null, 2, 2))
     }
@@ -38,16 +39,16 @@ fun initUserData() {
 
 fun clearUserData() {
     runBlocking {
-        val characterService = getService(CharacterService::class.java)
-        val skillService = getService(SkillService::class.java)
-        val partyService = getService(PartyService::class.java)
+        val characterService = getRepository(CharacterRepository::class.java)
+        val skillService = getRepository(SkillRepository::class.java)
+        val partyService = getRepository(PartyRepository::class.java)
         characterService.deleteAll()
         skillService.deleteAll()
         partyService.deleteAll()
     }
 }
 
-fun <T : AbstractService> getService(clazz: Class<T>): T {
+fun <T : AbstractRepository> getRepository(clazz: Class<T>): T {
     val schema = Schema("mem")
     return clazz.getConstructor(schema::class.java).newInstance(schema)
 }

@@ -1,5 +1,6 @@
 package com.kaiserpudding.api.gamedata.role
 
+import com.kaiserpudding.repository.RoleRepository
 import io.ktor.application.call
 import io.ktor.http.CacheControl
 import io.ktor.response.cacheControl
@@ -8,7 +9,7 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.route
 
-fun Route.role(service: RoleService) {
+fun Route.role(service: RoleRepository) {
     route("/api/role") {
 
         get("/") {

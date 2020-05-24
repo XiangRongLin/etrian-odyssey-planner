@@ -1,17 +1,17 @@
 package com.kaiserpudding
 
 import com.fasterxml.jackson.databind.SerializationFeature
-import com.kaiserpudding.api.gamedata.role.RoleService
 import com.kaiserpudding.api.gamedata.role.role
-import com.kaiserpudding.api.gamedata.skillinfo.SkillInfoService
 import com.kaiserpudding.api.gamedata.skillinfo.skillInfo
-import com.kaiserpudding.api.userdata.character.CharacterService
 import com.kaiserpudding.api.userdata.character.character
-import com.kaiserpudding.api.userdata.party.PartyService
 import com.kaiserpudding.api.userdata.party.party
-import com.kaiserpudding.api.userdata.skill.SkillService
 import com.kaiserpudding.database.DatabaseFactory
 import com.kaiserpudding.database.DatabaseMigrations
+import com.kaiserpudding.repository.CharacterRepository
+import com.kaiserpudding.repository.PartyRepository
+import com.kaiserpudding.repository.RoleRepository
+import com.kaiserpudding.repository.SkillInfoRepository
+import com.kaiserpudding.repository.SkillRepository
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.Application
 import io.ktor.application.call
@@ -76,10 +76,10 @@ fun Application.module(testing: Boolean = false) {
     }
 
     install(Routing) {
-        role(RoleService())
-        skillInfo(SkillInfoService())
-        character(CharacterService(), SkillService())
-        party(PartyService())
+        role(RoleRepository())
+        skillInfo(SkillInfoRepository())
+        character(CharacterRepository(), SkillRepository())
+        party(PartyRepository())
     }
 
     routing {

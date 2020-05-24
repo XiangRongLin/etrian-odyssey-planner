@@ -1,6 +1,7 @@
-package com.kaiserpudding.api.userdata.character
+package com.kaiserpudding.repository
 
-import com.kaiserpudding.api.AbstractService
+import com.kaiserpudding.api.userdata.character.Character
+import com.kaiserpudding.api.userdata.character.NewCharacter
 import com.kaiserpudding.database.CharacterTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Schema
@@ -11,7 +12,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
 
-class CharacterService(schema: Schema? = null) : AbstractService(schema) {
+class CharacterRepository(schema: Schema? = null) : AbstractRepository(schema) {
 
     suspend fun create(character: NewCharacter): Int = dbQuery {
         CharacterTable.insert {

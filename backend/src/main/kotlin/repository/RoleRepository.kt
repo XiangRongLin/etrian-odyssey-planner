@@ -1,12 +1,12 @@
-package com.kaiserpudding.api.gamedata.role
+package com.kaiserpudding.repository
 
-import com.kaiserpudding.api.AbstractService
+import com.kaiserpudding.api.gamedata.role.Role
 import com.kaiserpudding.database.RoleTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Schema
 import org.jetbrains.exposed.sql.selectAll
 
-class RoleService(schema: Schema? = null) : AbstractService(schema) {
+class RoleRepository(schema: Schema? = null) : AbstractRepository(schema) {
 
     suspend fun getAll(): List<Role> {
         return dbQuery {

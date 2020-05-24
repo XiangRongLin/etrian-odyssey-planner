@@ -1,7 +1,7 @@
-package com.kaiserpudding.api.userdata.skill
+package com.kaiserpudding.repository
 
-import com.kaiserpudding.api.AbstractService
-import com.kaiserpudding.api.gamedata.skillinfo.SkillInfoService
+import com.kaiserpudding.api.userdata.skill.NewSkill
+import com.kaiserpudding.api.userdata.skill.Skill
 import com.kaiserpudding.database.SkillTable
 import com.kaiserpudding.extension.upsert
 import org.jetbrains.exposed.sql.ResultRow
@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 
-class SkillService(schema: Schema? = null) : AbstractService(schema) {
+class SkillRepository(schema: Schema? = null) : AbstractRepository(schema) {
 
     suspend fun get(id: Int): Skill? = dbQuery {
         SkillTable.select { SkillTable.id eq id }
@@ -65,7 +65,8 @@ class SkillService(schema: Schema? = null) : AbstractService(schema) {
         val skills = getFromCharacter(character)
         val skillsMap = skills.map { skill -> skill.id to skill }.toMap()
         val skillInfosMap =
-            SkillInfoService().get(skills.map { it.skillInfoId }).map { skillInfo -> skillInfo.id to skillInfo }.toMap()
+            SkillInfoRepository()
+                .get(skills.map { it.skillInfoId }).map { skillInfo -> skillInfo.id to skillInfo }.toMap()
 
         skills.forEach { skill ->
             skillInfosMap.getValue(skill.skillInfoId).prerequisites?.forEach { prerequisite ->

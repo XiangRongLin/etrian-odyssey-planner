@@ -2,10 +2,10 @@ package api.userdata.skill
 
 import com.kaiserpudding.api.clearUserData
 import com.kaiserpudding.api.dbTest
-import com.kaiserpudding.api.getService
+import com.kaiserpudding.api.getRepository
 import com.kaiserpudding.api.initDatabase
 import com.kaiserpudding.api.initUserData
-import com.kaiserpudding.api.userdata.skill.SkillService
+import com.kaiserpudding.repository.SkillRepository
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -15,9 +15,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class SkillServiceTest {
+class SkillRepositoryTest {
 
-    private val service = getService(SkillService::class.java)
+    private val repository = getRepository(SkillRepository::class.java)
 
     init {
         initDatabase()
@@ -36,13 +36,13 @@ class SkillServiceTest {
 
     @Test
     fun `get skill from invalid character`() = dbTest {
-        val result = service.getFromCharacter(-1)
+        val result = repository.getFromCharacter(-1)
         assertTrue(result.isEmpty())
     }
 
     @Test
     fun `get single skill of character`() = dbTest {
-        val result = service.getFromCharacter(1)
+        val result = repository.getFromCharacter(1)
 
         assertFalse(result.isEmpty())
         assertEquals(1, result.size)

@@ -1,7 +1,8 @@
-package com.kaiserpudding.api.gamedata.skillinfo
+package com.kaiserpudding.repository
 
-import com.kaiserpudding.api.AbstractService
 import com.kaiserpudding.api.gamedata.role.Role
+import com.kaiserpudding.api.gamedata.skillinfo.SkillInfo
+import com.kaiserpudding.api.gamedata.skillinfo.SkillInfoPrerequisite
 import com.kaiserpudding.database.SkillInfoPrerequisiteTable
 import com.kaiserpudding.database.SkillInfoTable
 import org.jetbrains.exposed.sql.ResultRow
@@ -9,7 +10,7 @@ import org.jetbrains.exposed.sql.Schema
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 
-class SkillInfoService(schema: Schema? = null) : AbstractService(schema) {
+class SkillInfoRepository(schema: Schema? = null) : AbstractRepository(schema) {
 
     suspend fun getAll(): List<SkillInfo> = dbQuery {
         SkillInfoTable.selectAll().map { toSkillInfo(it) }
@@ -36,14 +37,15 @@ class SkillInfoService(schema: Schema? = null) : AbstractService(schema) {
             .toList()
     }
 
-    private suspend fun toSkillInfo(row: ResultRow): SkillInfo = SkillInfo(
-        id = row[SkillInfoTable.id],
-        role = Role(row[SkillInfoTable.roleName]),
-        name = row[SkillInfoTable.name],
-        description = row[SkillInfoTable.description],
-        maxLevel = row[SkillInfoTable.maxLevel],
-        prerequisites = getPrerequisite(row[SkillInfoTable.id])
-    )
+    private suspend fun toSkillInfo(row: ResultRow): SkillInfo =
+        SkillInfo(
+            id = row[SkillInfoTable.id],
+            role = Role(row[SkillInfoTable.roleName]),
+            name = row[SkillInfoTable.name],
+            description = row[SkillInfoTable.description],
+            maxLevel = row[SkillInfoTable.maxLevel],
+            prerequisites = getPrerequisite(row[SkillInfoTable.id])
+        )
 
     private suspend fun getPrerequisite(id: Int): List<SkillInfoPrerequisite>? = dbQuery {
         SkillInfoPrerequisiteTable
@@ -51,10 +53,11 @@ class SkillInfoService(schema: Schema? = null) : AbstractService(schema) {
             .map { toPrerequisite(it) }
     }
 
-    private fun toPrerequisite(row: ResultRow): SkillInfoPrerequisite = SkillInfoPrerequisite(
-        id = row[SkillInfoPrerequisiteTable.prerequisiteId],
-        level = row[SkillInfoPrerequisiteTable.prerequisiteLevel]
-    )
+    private fun toPrerequisite(row: ResultRow): SkillInfoPrerequisite =
+        SkillInfoPrerequisite(
+            id = row[SkillInfoPrerequisiteTable.prerequisiteId],
+            level = row[SkillInfoPrerequisiteTable.prerequisiteLevel]
+        )
 
 
 }

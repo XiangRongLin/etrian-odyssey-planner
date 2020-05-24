@@ -1,5 +1,6 @@
 package com.kaiserpudding.api.userdata.party
 
+import com.kaiserpudding.repository.PartyRepository
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
@@ -11,7 +12,7 @@ import io.ktor.routing.post
 import io.ktor.routing.put
 import io.ktor.routing.route
 
-fun Route.party(service: PartyService) {
+fun Route.party(service: PartyRepository) {
     route("api/party") {
 
         get("/") {

@@ -2,9 +2,9 @@ package api.gamedata.role
 
 import com.kaiserpudding.api.dbTest
 import com.kaiserpudding.api.gamedata.role.Role
-import com.kaiserpudding.api.gamedata.role.RoleService
-import com.kaiserpudding.api.getService
+import com.kaiserpudding.api.getRepository
 import com.kaiserpudding.api.initDatabase
+import com.kaiserpudding.repository.RoleRepository
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.junit.Assert.assertThat
 import org.junit.jupiter.api.Test
@@ -12,9 +12,9 @@ import org.junit.jupiter.api.TestInstance
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class RoleServiceTest {
+class RoleRepositoryTest {
 
-    private val service = getService(RoleService::class.java)
+    private val repository = getRepository(RoleRepository::class.java)
 
     init {
         initDatabase()
@@ -22,7 +22,7 @@ class RoleServiceTest {
 
     @Test
     fun getAllRoles() = dbTest {
-        val result = service.getAll()
+        val result = repository.getAll()
         val expected = listOf(
             "Protector",
             "Survivalist",

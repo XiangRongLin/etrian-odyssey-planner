@@ -1,7 +1,8 @@
-package com.kaiserpudding.api.userdata.party
+package com.kaiserpudding.repository
 
-import com.kaiserpudding.api.AbstractService
-import com.kaiserpudding.api.userdata.character.CharacterService
+import com.kaiserpudding.api.userdata.party.NewParty
+import com.kaiserpudding.api.userdata.party.Party
+import com.kaiserpudding.api.userdata.party.PartyMember
 import com.kaiserpudding.database.PartyMemberTable
 import com.kaiserpudding.database.PartyTable
 import com.kaiserpudding.extension.upsert
@@ -15,7 +16,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
 
-class PartyService(schema: Schema? = null) : AbstractService(schema) {
+class PartyRepository(schema: Schema? = null) : AbstractRepository(schema) {
 
     suspend fun create(party: NewParty): Int = dbQuery {
         PartyTable.insert {
@@ -34,11 +35,12 @@ class PartyService(schema: Schema? = null) : AbstractService(schema) {
             .singleOrNull()
     }
 
-    private suspend fun toParty(row: ResultRow): Party = Party(
-        id = row[PartyTable.id],
-        name = row[PartyTable.name],
-        members = getPartyMembers(row[PartyTable.id])
-    )
+    private suspend fun toParty(row: ResultRow): Party =
+        Party(
+            id = row[PartyTable.id],
+            name = row[PartyTable.name],
+            members = getPartyMembers(row[PartyTable.id])
+        )
 
     suspend fun update(party: Party): Party? = dbQuery {
         PartyTable.update({ PartyTable.id.eq(party.id) }) {
@@ -58,7 +60,7 @@ class PartyService(schema: Schema? = null) : AbstractService(schema) {
 
     private suspend fun toMember(row: ResultRow): PartyMember =
         PartyMember(
-            character = CharacterService().getNonNullable(row[PartyMemberTable.memberId]),
+            character = CharacterRepository().getNonNullable(row[PartyMemberTable.memberId]),
             position = row[PartyMemberTable.position]
         )
 

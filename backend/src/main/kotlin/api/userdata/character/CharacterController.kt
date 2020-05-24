@@ -1,8 +1,9 @@
 package com.kaiserpudding.api.userdata.character
 
 import com.kaiserpudding.api.userdata.skill.NewSkill
-import com.kaiserpudding.api.userdata.skill.SkillService
 import com.kaiserpudding.extension.getIntParameter
+import com.kaiserpudding.repository.CharacterRepository
+import com.kaiserpudding.repository.SkillRepository
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
@@ -14,7 +15,7 @@ import io.ktor.routing.post
 import io.ktor.routing.put
 import io.ktor.routing.route
 
-fun Route.character(characterService: CharacterService, skillService: SkillService) {
+fun Route.character(characterService: CharacterRepository, skillService: SkillRepository) {
     route("api/character") {
 
         get("/") {
