@@ -1,11 +1,8 @@
-package com.kaiserpudding.api
+package com.kaiserpudding.repository
 
-import com.kaiserpudding.api.userdata.character.NewCharacter
-import com.kaiserpudding.api.userdata.skill.NewSkill
-import com.kaiserpudding.repository.AbstractRepository
-import com.kaiserpudding.repository.CharacterRepository
-import com.kaiserpudding.repository.PartyRepository
-import com.kaiserpudding.repository.SkillRepository
+import com.kaiserpudding.database.DatabaseFactory.dbQuery
+import com.kaiserpudding.model.NewCharacter
+import com.kaiserpudding.model.NewSkill
 import kotlinx.coroutines.runBlocking
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
@@ -30,7 +27,8 @@ fun initDatabase() {
 
 fun initUserData() {
     runBlocking {
-        val characterService = getRepository(CharacterRepository::class.java)
+        val characterService =
+            getRepository(CharacterRepository::class.java)
         val skillService = getRepository(SkillRepository::class.java)
         val character = characterService.create(NewCharacter("name", "Hero"))
         skillService.create(character, NewSkill(null, 2, 2))
@@ -39,7 +37,8 @@ fun initUserData() {
 
 fun clearUserData() {
     runBlocking {
-        val characterService = getRepository(CharacterRepository::class.java)
+        val characterService =
+            getRepository(CharacterRepository::class.java)
         val skillService = getRepository(SkillRepository::class.java)
         val partyService = getRepository(PartyRepository::class.java)
         characterService.deleteAll()
@@ -54,5 +53,6 @@ fun <T : AbstractRepository> getRepository(clazz: Class<T>): T {
 }
 
 fun <T> dbTest(block: suspend () -> T): T = runBlocking {
-    block()
+    val schema = Schema("mem")
+    dbQuery(schema, block)
 }

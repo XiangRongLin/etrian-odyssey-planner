@@ -1,6 +1,6 @@
 package com.kaiserpudding.database
 
-import com.kaiserpudding.api.userdata.party.Position
+import com.kaiserpudding.model.Position
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
 

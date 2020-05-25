@@ -1,17 +1,14 @@
 package com.kaiserpudding
 
 import com.fasterxml.jackson.databind.SerializationFeature
-import com.kaiserpudding.api.gamedata.role.role
-import com.kaiserpudding.api.gamedata.skillinfo.skillInfo
-import com.kaiserpudding.api.userdata.character.character
-import com.kaiserpudding.api.userdata.party.party
+import com.kaiserpudding.api.gamedata.role
+import com.kaiserpudding.api.gamedata.skillInfo
+import com.kaiserpudding.api.userdata.character
+import com.kaiserpudding.api.userdata.party
 import com.kaiserpudding.database.DatabaseFactory
 import com.kaiserpudding.database.DatabaseMigrations
-import com.kaiserpudding.repository.CharacterRepository
-import com.kaiserpudding.repository.PartyRepository
-import com.kaiserpudding.repository.RoleRepository
-import com.kaiserpudding.repository.SkillInfoRepository
-import com.kaiserpudding.repository.SkillRepository
+import com.kaiserpudding.service.demo.ServiceLocatorDemo
+import com.kaiserpudding.service.implementation.ServiceLocatorImpl
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.Application
 import io.ktor.application.call
@@ -75,11 +72,16 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 
+    val serviceLocator = if (testing) {
+        ServiceLocatorDemo
+    } else {
+        ServiceLocatorImpl
+    }
     install(Routing) {
-        role(RoleRepository())
-        skillInfo(SkillInfoRepository())
-        character(CharacterRepository(), SkillRepository())
-        party(PartyRepository())
+        role(serviceLocator)
+        skillInfo(serviceLocator)
+        character(serviceLocator)
+        party(serviceLocator)
     }
 
     routing {

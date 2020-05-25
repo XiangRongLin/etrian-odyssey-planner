@@ -1,26 +1,25 @@
 package com.kaiserpudding.repository
 
-import com.kaiserpudding.api.userdata.skill.NewSkill
-import com.kaiserpudding.api.userdata.skill.Skill
 import com.kaiserpudding.database.SkillTable
 import com.kaiserpudding.extension.upsert
+import com.kaiserpudding.model.NewSkill
+import com.kaiserpudding.model.Skill
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.Schema
 import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 
-class SkillRepository(schema: Schema? = null) : AbstractRepository(schema) {
+class SkillRepository : AbstractRepository() {
 
-    suspend fun get(id: Int): Skill? = dbQuery {
-        SkillTable.select { SkillTable.id eq id }
+    fun get(id: Int): Skill? {
+        return SkillTable.select { SkillTable.id eq id }
             .limit(1)
             .mapNotNull { toSkill(it) }
             .singleOrNull()
     }
 
-    suspend fun create(character: Int, skill: NewSkill): Int = dbQuery {
-        SkillTable.insert {
+    fun create(character: Int, skill: NewSkill): Int {
+        return SkillTable.insert {
             it[skillInfoId] = skill.skillInfoId
             it[level] = skill.level
             it[characterId] = character
@@ -31,8 +30,8 @@ class SkillRepository(schema: Schema? = null) : AbstractRepository(schema) {
      * Returns all skills from the character with given id
      * @return A list of the skills, list is empty if no skills are found
      */
-    suspend fun getFromCharacter(id: Int): List<Skill> = dbQuery {
-        SkillTable.select { SkillTable.characterId eq id }
+    fun getByCharacter(id: Int): List<Skill> {
+        return SkillTable.select { SkillTable.characterId eq id }
             .mapNotNull { toSkill(it) }
     }
 
@@ -43,7 +42,7 @@ class SkillRepository(schema: Schema? = null) : AbstractRepository(schema) {
             level = row[SkillTable.level]
         )
 
-    suspend fun updateSkills(character: Int, skills: List<NewSkill>) = dbQuery {
+    fun updateSkills(character: Int, skills: List<NewSkill>) {
         skills.forEach { skill ->
             SkillTable.upsert(SkillTable.id) {
                 it[skillInfoId] = skill.skillInfoId
@@ -61,8 +60,8 @@ class SkillRepository(schema: Schema? = null) : AbstractRepository(schema) {
      * Checks if the skills saved in the database is valid.
      * The prerequisites of each skills have to be learned to the minimum level.
      * */
-    private suspend fun checkSkillValid(character: Int): Boolean {
-        val skills = getFromCharacter(character)
+    private fun checkSkillValid(character: Int): Boolean {
+        val skills = getByCharacter(character)
         val skillsMap = skills.map { skill -> skill.id to skill }.toMap()
         val skillInfosMap =
             SkillInfoRepository()
@@ -78,7 +77,6 @@ class SkillRepository(schema: Schema? = null) : AbstractRepository(schema) {
         return true
     }
 
-    internal suspend fun deleteAll() = dbQuery {
-        SkillTable.deleteAll()
-    }
+    internal fun deleteAll() = SkillTable.deleteAll()
+
 }

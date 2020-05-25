@@ -1,4 +1,4 @@
-package com.kaiserpudding.api.gamedata.skillinfo
+package com.kaiserpudding.model
 
 data class SkillInfoPrerequisite(
     val id: Int,

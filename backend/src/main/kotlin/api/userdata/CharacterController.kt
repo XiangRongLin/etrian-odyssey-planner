@@ -1,9 +1,10 @@
-package com.kaiserpudding.api.userdata.character
+package com.kaiserpudding.api.userdata
 
-import com.kaiserpudding.api.userdata.skill.NewSkill
 import com.kaiserpudding.extension.getIntParameter
-import com.kaiserpudding.repository.CharacterRepository
-import com.kaiserpudding.repository.SkillRepository
+import com.kaiserpudding.model.CharacterSummary
+import com.kaiserpudding.model.NewCharacter
+import com.kaiserpudding.model.NewSkill
+import com.kaiserpudding.service.ServiceLocator
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
@@ -11,26 +12,27 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.delete
 import io.ktor.routing.get
+import io.ktor.routing.patch
 import io.ktor.routing.post
 import io.ktor.routing.put
 import io.ktor.routing.route
 
-fun Route.character(characterService: CharacterRepository, skillService: SkillRepository) {
+fun Route.character(serviceLocator: ServiceLocator) {
     route("api/character") {
 
         get("/") {
             val parameters = call.request.queryParameters
             val name = parameters["name"]
             if (name.isNullOrEmpty()) {
-                call.respond(characterService.getAll())
+                call.respond(serviceLocator.characterService.getAll())
             } else {
-                call.respond(characterService.searchBy(name))
+                call.respond(serviceLocator.characterService.getByName(name))
             }
         }
 
         get("/{id}") {
             val id = checkNotNull(call.parameters["id"]).toInt()
-            val character = characterService.get(id)
+            val character = serviceLocator.characterService.get(id)
             if (character != null) {
                 call.respond(character)
             } else {
@@ -40,19 +42,19 @@ fun Route.character(characterService: CharacterRepository, skillService: SkillRe
 
         post("/") {
             val character: NewCharacter = call.receive()
-            call.respond(HttpStatusCode.OK, characterService.create(character))
+            call.respond(HttpStatusCode.OK, serviceLocator.characterService.create(character))
         }
 
         put("/{id}") {
             val id = checkNotNull(call.parameters["id"]).toInt()
             val character: NewCharacter = call.receive()
-            characterService.update(Character(id, character))
+            serviceLocator.characterService.update(CharacterSummary(id, character))
             call.respond(HttpStatusCode.OK)
         }
 
         delete("/{id}") {
             val id = checkNotNull(call.parameters["id"]).toInt()
-            characterService.delete(id)
+            serviceLocator.characterService.delete(id)
             call.respond(HttpStatusCode.NoContent)
         }
 
@@ -60,13 +62,13 @@ fun Route.character(characterService: CharacterRepository, skillService: SkillRe
 
             get("/") {
                 val id = call.getIntParameter("id")
-                call.respond(skillService.getFromCharacter(id))
+                call.respond(serviceLocator.characterService.getSkillsByCharacter(id))
             }
 
-            put("/") {
+            patch("/") {
                 val id = call.getIntParameter("id")
                 val skills: List<NewSkill> = call.receive()
-                skillService.updateSkills(id, skills)
+                serviceLocator.characterService.updateSkills(id, skills)
                 call.respond(HttpStatusCode.OK)
             }
         }

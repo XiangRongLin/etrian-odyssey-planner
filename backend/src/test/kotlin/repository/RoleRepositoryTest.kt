@@ -1,10 +1,6 @@
-package api.gamedata.role
+package com.kaiserpudding.repository
 
-import com.kaiserpudding.api.dbTest
-import com.kaiserpudding.api.gamedata.role.Role
-import com.kaiserpudding.api.getRepository
-import com.kaiserpudding.api.initDatabase
-import com.kaiserpudding.repository.RoleRepository
+import com.kaiserpudding.model.Role
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.junit.Assert.assertThat
 import org.junit.jupiter.api.Test

@@ -1,6 +1,9 @@
-package com.kaiserpudding.api.userdata.party
+package com.kaiserpudding.api.userdata
 
-import com.kaiserpudding.repository.PartyRepository
+import com.kaiserpudding.model.NewParty
+import com.kaiserpudding.model.NewPartyMember
+import com.kaiserpudding.model.Party
+import com.kaiserpudding.service.ServiceLocator
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
@@ -8,55 +11,48 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.delete
 import io.ktor.routing.get
+import io.ktor.routing.patch
 import io.ktor.routing.post
 import io.ktor.routing.put
 import io.ktor.routing.route
 
-fun Route.party(service: PartyRepository) {
+fun Route.party(serviceLocator: ServiceLocator) {
     route("api/party") {
 
         get("/") {
-            call.respond(service.getAll())
+            call.respond(serviceLocator.partyService.getAll())
         }
 
         get("/{id}") {
             val id = checkNotNull(call.parameters["id"]).toInt()
-            call.respond(checkNotNull(service.get(id)))
+            call.respond(checkNotNull(serviceLocator.partyService.get(id)))
         }
 
         post("/") {
             val party: NewParty = call.receive()
-            call.respond(HttpStatusCode.Created, service.create(party))
+            call.respond(HttpStatusCode.Created, serviceLocator.partyService.create(party))
         }
 
         put("/{id}") {
             val id = checkNotNull(call.parameters["id"]).toInt()
             val party: NewParty = call.receive()
-            service.update(Party(id, party))
+            serviceLocator.partyService.update(Party(id, party))
             call.respond(HttpStatusCode.OK)
         }
 
         delete("/{id}") {
             val id = checkNotNull(call.parameters["id"]).toInt()
-            check(service.delete(id))
+            check(serviceLocator.partyService.delete(id))
             call.respond(HttpStatusCode.OK)
         }
 
         route("{id}/member") {
-            put("/") {
+            patch("/") {
                 val partyId = checkNotNull(call.parameters["id"]).toInt()
-                val members = call.receive<List<PartyMember>>()
-                service.updateMembers(partyId, members)
-                call.respond(HttpStatusCode.OK)
-            }
-
-            delete("/{member_id}") {
-                val partyId = checkNotNull(call.parameters["id"]).toInt()
-                val memberId = checkNotNull(call.parameters["member_id"]).toInt()
-                check(service.removeMember(partyId, memberId))
+                val members = call.receive<List<NewPartyMember>>()
+                serviceLocator.partyService.updateMembers(partyId, members)
                 call.respond(HttpStatusCode.OK)
             }
         }
-
     }
 }

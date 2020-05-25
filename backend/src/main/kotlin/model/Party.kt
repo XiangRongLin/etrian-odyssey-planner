@@ -1,4 +1,4 @@
-package com.kaiserpudding.api.userdata.party
+package com.kaiserpudding.model
 
 data class Party(
     val id: Int,

@@ -1,4 +1,4 @@
-package com.kaiserpudding.api.userdata.skill
+package com.kaiserpudding.model
 
 data class Skill(
     val id: Int,

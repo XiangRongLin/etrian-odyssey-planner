@@ -1,4 +1,4 @@
-package com.kaiserpudding.api.userdata.party
+package com.kaiserpudding.model
 
 enum class Position {
     FRONT_LEFT,
@@ -6,5 +6,6 @@ enum class Position {
     FRONT_RIGHT,
     BACK_LEFT,
     BACK_MIDDLE,
-    BACK_RIGHT
+    BACK_RIGHT,
+    NOT_IN_PARTY
 }

@@ -1,6 +1,4 @@
-package com.kaiserpudding.api.gamedata.skillinfo
-
-import com.kaiserpudding.api.gamedata.role.Role
+package com.kaiserpudding.model
 
 data class SkillInfo(
     val id: Int,
