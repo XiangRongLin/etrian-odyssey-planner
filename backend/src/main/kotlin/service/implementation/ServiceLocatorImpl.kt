@@ -10,10 +10,12 @@ import com.kaiserpudding.service.PartyService
 import com.kaiserpudding.service.RoleService
 import com.kaiserpudding.service.ServiceLocator
 import com.kaiserpudding.service.SkillInfoService
+import com.kaiserpudding.service.SkillService
 
 internal object ServiceLocatorImpl : ServiceLocator {
     override val characterService: CharacterService = CharacterServiceImpl(CharacterRepository(), SkillRepository())
     override val partyService: PartyService = PartyServiceImpl(PartyRepository())
     override val roleService: RoleService = RoleServiceImpl(RoleRepository())
     override val skillInfoService: SkillInfoService = SkillInfoServiceImpl(SkillInfoRepository())
+    override val skillService: SkillService = SkillServiceImpl(SkillRepository())
 }

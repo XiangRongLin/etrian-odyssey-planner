@@ -5,5 +5,6 @@ interface ServiceLocator {
     val partyService: PartyService
     val roleService: RoleService
     val skillInfoService: SkillInfoService
+    val skillService: SkillService
 }
 

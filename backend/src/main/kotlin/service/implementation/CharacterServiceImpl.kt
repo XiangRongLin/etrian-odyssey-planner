@@ -4,8 +4,6 @@ import com.kaiserpudding.database.DatabaseFactory.dbQuery
 import com.kaiserpudding.model.CharacterDetail
 import com.kaiserpudding.model.CharacterSummary
 import com.kaiserpudding.model.NewCharacter
-import com.kaiserpudding.model.NewSkill
-import com.kaiserpudding.model.Skill
 import com.kaiserpudding.repository.CharacterRepository
 import com.kaiserpudding.repository.SkillRepository
 import com.kaiserpudding.service.CharacterService
@@ -38,13 +36,5 @@ internal class CharacterServiceImpl(
 
     override suspend fun delete(id: Int): Boolean = dbQuery {
         characterRepository.delete(id)
-    }
-
-    override suspend fun getSkillsByCharacter(character: Int): List<Skill> = dbQuery {
-        skillRepository.getByCharacter(character)
-    }
-
-    override suspend fun updateSkills(character: Int, skills: List<NewSkill>): Unit = dbQuery {
-        skillRepository.updateSkills(character, skills)
     }
 }

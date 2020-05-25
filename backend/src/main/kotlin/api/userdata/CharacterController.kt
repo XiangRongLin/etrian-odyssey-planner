@@ -62,13 +62,13 @@ fun Route.character(serviceLocator: ServiceLocator) {
 
             get("/") {
                 val id = call.getIntParameter("id")
-                call.respond(serviceLocator.characterService.getSkillsByCharacter(id))
+                call.respond(serviceLocator.skillService.getByCharacter(id))
             }
 
             patch("/") {
                 val id = call.getIntParameter("id")
                 val skills: List<NewSkill> = call.receive()
-                serviceLocator.characterService.updateSkills(id, skills)
+                serviceLocator.skillService.update(id, skills)
                 call.respond(HttpStatusCode.OK)
             }
         }
