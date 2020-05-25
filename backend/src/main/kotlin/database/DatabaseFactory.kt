@@ -3,8 +3,6 @@ package com.kaiserpudding.database
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.Schema
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
 object DatabaseFactory {
@@ -15,9 +13,8 @@ object DatabaseFactory {
         Database.connect(dataSource)
     }
 
-    suspend fun <T> dbQuery(schema: Schema? = null, block: suspend () -> T): T =
+    suspend fun <T> dbQuery(block: suspend () -> T): T =
         newSuspendedTransaction {
-            schema?.let { SchemaUtils.setSchema(schema) }
             block()
         }
 

@@ -1,32 +1,14 @@
 package com.kaiserpudding.repository
 
+import com.kaiserpudding.model.NewSkill
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class SkillRepositoryTest {
+internal class SkillRepositoryTest : AbstractRepositoryTest() {
 
-    private val repository = getRepository(SkillRepository::class.java)
-
-    init {
-        initDatabase()
-    }
-
-
-    @BeforeEach
-    fun setUp() {
-        initUserData()
-    }
-
-    @AfterEach
-    fun tearDown() {
-        clearUserData()
-    }
+    private val repository = SkillRepository()
 
     @Test
     fun `get skill from invalid character`() = dbTest {
@@ -42,5 +24,14 @@ class SkillRepositoryTest {
         assertEquals(1, result.size)
         assertEquals(2, result.first().skillInfoId)
         assertEquals(2, result.first().level)
+    }
+
+    @Test
+    fun `add skill`() = dbTest {
+        repository.create(1, NewSkill(null, 3, 2))
+        val result = repository.getByCharacter(1)
+
+        assertFalse(result.isEmpty())
+        assertEquals(2, result.size)
     }
 }

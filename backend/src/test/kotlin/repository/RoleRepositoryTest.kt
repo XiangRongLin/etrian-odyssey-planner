@@ -4,17 +4,10 @@ import com.kaiserpudding.model.Role
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.junit.Assert.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 
+internal class RoleRepositoryTest : AbstractRepositoryTest() {
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class RoleRepositoryTest {
-
-    private val repository = getRepository(RoleRepository::class.java)
-
-    init {
-        initDatabase()
-    }
+    private val repository = RoleRepository()
 
     @Test
     fun getAllRoles() = dbTest {
