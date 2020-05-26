@@ -35,6 +35,10 @@ object SkillInfoPrerequisiteTable : Table("skill_info_prerequisites") {
             onDelete = ReferenceOption.CASCADE
         )
     val prerequisiteLevel = SkillInfoPrerequisiteTable.integer("prerequisite_level")
+
+    init {
+        SkillInfoPrerequisiteTable.uniqueIndex(skillInfoId, prerequisiteId)
+    }
 }
 
 object CharacterTable : Table("characters") {
@@ -70,7 +74,6 @@ object PartyMemberTable : Table("party_members") {
 }
 
 object SkillTable : Table("skills") {
-    val id = SkillTable.integer("id").autoIncrement()
     val skillInfoId = SkillTable.integer("skill_info_id").references(
         SkillInfoTable.id,
         onUpdate = ReferenceOption.CASCADE,
@@ -82,7 +85,6 @@ object SkillTable : Table("skills") {
         onUpdate = ReferenceOption.CASCADE,
         onDelete = ReferenceOption.CASCADE
     )
-    override val primaryKey = PrimaryKey(id)
 
     init {
         SkillTable.uniqueIndex(skillInfoId, characterId)

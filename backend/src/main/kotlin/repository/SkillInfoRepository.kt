@@ -11,16 +11,6 @@ import org.jetbrains.exposed.sql.selectAll
 
 class SkillInfoRepository : AbstractRepository() {
 
-    fun getAll(): List<SkillInfo> {
-        return SkillInfoTable.selectAll().map { toSkillInfo(it) }
-    }
-
-    fun getByRole(role: String): List<SkillInfo> {
-        return SkillInfoTable
-            .select { SkillInfoTable.roleName eq role }
-            .mapNotNull { toSkillInfo(it) }
-    }
-
     internal fun get(id: Int): SkillInfo? {
         return SkillInfoTable
             .select { SkillInfoTable.id eq id }
@@ -34,6 +24,16 @@ class SkillInfoRepository : AbstractRepository() {
             .select { SkillInfoTable.id inList ids }
             .mapNotNull { toSkillInfo(it) }
             .toList()
+    }
+
+    fun getAll(): List<SkillInfo> {
+        return SkillInfoTable.selectAll().map { toSkillInfo(it) }
+    }
+
+    fun getByRole(role: String): List<SkillInfo> {
+        return SkillInfoTable
+            .select { SkillInfoTable.roleName eq role }
+            .mapNotNull { toSkillInfo(it) }
     }
 
     private fun getPrerequisite(id: Int): List<SkillInfoPrerequisite>? {

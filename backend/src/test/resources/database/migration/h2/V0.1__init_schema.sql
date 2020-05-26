@@ -31,11 +31,9 @@ CREATE TABLE characters (
 );
 
 CREATE TABLE skills (
-    id            int4 NOT NULL AUTO_INCREMENT,
     skill_info_id int4 NOT NULL,
     level         int4 NOT NULL,
     character_id  int4 NOT NULL,
-    CONSTRAINT skills_id_pkey PRIMARY KEY (id),
     CONSTRAINT skills_skill_info_id_character_id UNIQUE (skill_info_id, character_id),
     CONSTRAINT fk_skills_character_id_id FOREIGN KEY (character_id) REFERENCES characters (id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT fk_skills_skill_info_id_id FOREIGN KEY (skill_info_id) REFERENCES skill_infos (id) ON UPDATE CASCADE ON DELETE RESTRICT

@@ -3,9 +3,10 @@ package com.kaiserpudding.api.userdata
 import com.kaiserpudding.extension.getIntParameter
 import com.kaiserpudding.model.CharacterSummary
 import com.kaiserpudding.model.NewCharacter
-import com.kaiserpudding.model.NewSkill
+import com.kaiserpudding.model.Skill
 import com.kaiserpudding.service.ServiceLocator
 import io.ktor.application.call
+import io.ktor.auth.authenticate
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
 import io.ktor.response.respond
@@ -40,10 +41,13 @@ fun Route.character(serviceLocator: ServiceLocator) {
             }
         }
 
-        post("/") {
-            val character: NewCharacter = call.receive()
-            call.respond(HttpStatusCode.OK, serviceLocator.characterService.create(character))
+        authenticate("basicAuth") {
+            post("/") {
+                val character: NewCharacter = call.receive()
+                call.respond(HttpStatusCode.OK, serviceLocator.characterService.create(character))
+            }
         }
+
 
         put("/{id}") {
             val id = checkNotNull(call.parameters["id"]).toInt()
@@ -67,7 +71,7 @@ fun Route.character(serviceLocator: ServiceLocator) {
 
             patch("/") {
                 val id = call.getIntParameter("id")
-                val skills: List<NewSkill> = call.receive()
+                val skills: List<Skill> = call.receive()
                 serviceLocator.skillService.update(id, skills)
                 call.respond(HttpStatusCode.OK)
             }
