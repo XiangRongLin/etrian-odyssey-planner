@@ -4,14 +4,16 @@ import com.kaiserpudding.model.Role
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.junit.Assert.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class RoleRepositoryTest : AbstractRepositoryTest() {
 
     private val repository = RoleRepository()
 
     @Test
-    fun getAllRoles() = dbTest {
-        val result = repository.getAll()
+    fun getAll() = dbTest {
+        val actual = repository.getAll()
         val expected = listOf(
             "Protector",
             "Survivalist",
@@ -37,6 +39,6 @@ internal class RoleRepositoryTest : AbstractRepositoryTest() {
             .toTypedArray()
 
         // * operator https://kotlinlang.org/docs/reference/functions.html#variable-number-of-arguments-varargs
-        assertThat(result, containsInAnyOrder(*expected))
+        assertThat(actual, containsInAnyOrder(*expected))
     }
 }

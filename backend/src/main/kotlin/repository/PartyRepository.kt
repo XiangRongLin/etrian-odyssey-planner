@@ -62,6 +62,14 @@ class PartyRepository : AbstractRepository() {
             position = row[PartyMemberTable.position]
         )
 
+    internal fun createMember(party: Int, member: NewPartyMember) {
+        PartyMemberTable.insert {
+            it[partyId] = party
+            it[memberId] = member.characterId
+            it[position] = member.position
+        }
+    }
+
     private fun updateMember(party: Int, member: NewPartyMember) {
         PartyMemberTable.update({
             (PartyMemberTable.partyId eq party) and

@@ -1,37 +1,53 @@
 package com.kaiserpudding.repository
 
-import com.kaiserpudding.model.NewSkill
+import com.kaiserpudding.model.Skill
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class SkillRepositoryTest : AbstractRepositoryTest() {
 
     private val repository = SkillRepository()
 
+
     @Test
-    fun `get skill from invalid character`() = dbTest {
-        val result = repository.getByCharacter(-1)
-        assertTrue(result.isEmpty())
+    fun `getByCharacter(), invalid character`() = dbTest {
+        val actual = repository.getByCharacter(-1)
+        assertTrue(actual.isEmpty())
     }
 
     @Test
-    fun `get single skill of character`() = dbTest {
-        val result = repository.getByCharacter(1)
+    fun `getByCharacter(), single skill`() = dbTest {
+        val actual = repository.getByCharacter(character.id)
 
-        assertFalse(result.isEmpty())
-        assertEquals(1, result.size)
-        assertEquals(2, result.first().skillInfoId)
-        assertEquals(2, result.first().level)
+        assertFalse(actual.isEmpty())
+        assertEquals(1, actual.size)
+        assertEquals(character.skills.first(), actual.first())
     }
 
     @Test
-    fun `add skill`() = dbTest {
-        repository.create(1, NewSkill(null, 3, 2))
-        val result = repository.getByCharacter(1)
+    fun `insertOrUpdate(), create single valid skill`() = dbTest {
+        repository.insertOrUpdate(character.id, listOf(Skill(3, 4)))
+        val actual = repository.getByCharacter(character.id)
 
-        assertFalse(result.isEmpty())
-        assertEquals(2, result.size)
+        assertEquals(2, actual.size)
+        assertEquals(3, actual[1].skillInfoId)
+        assertEquals(4, actual[1].level)
     }
+
+    @Test
+    fun `insertOrUpdate(), update level`() = dbTest {
+        val skill = character.skills.first()
+        val updatedSkill = Skill(skill.skillInfoId, skill.level + 1)
+        repository.insertOrUpdate(character.id, listOf(updatedSkill))
+        val actual = repository.getByCharacter(character.id)
+
+        assertEquals(1, actual.size)
+        assertEquals(skill.skillInfoId, actual.first().skillInfoId)
+        assertEquals(skill.level + 1, actual.first().level)
+    }
+
 }
