@@ -6,7 +6,7 @@ import com.kaiserpudding.model.NewCharacter
 import com.kaiserpudding.service.CharacterService
 
 internal class CharacterServiceDemo : CharacterService {
-    override suspend fun create(character: NewCharacter): Int {
+    override suspend fun create(character: NewCharacter, user: Int): Int {
         TODO("Not yet implemented")
     }
 
@@ -22,11 +22,11 @@ internal class CharacterServiceDemo : CharacterService {
         TODO("Not yet implemented")
     }
 
-    override suspend fun update(characterSummary: CharacterSummary) {
+    override suspend fun update(characterSummary: CharacterSummary, user: Int) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun delete(id: Int): Boolean {
+    override suspend fun delete(id: Int, user: Int): Boolean {
         TODO("Not yet implemented")
     }
 }

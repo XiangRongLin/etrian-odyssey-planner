@@ -32,7 +32,7 @@ class SkillInfoRepository : AbstractRepository() {
 
     fun getByRole(role: String): List<SkillInfo> {
         return SkillInfoTable
-            .select { SkillInfoTable.roleName eq role }
+            .select { SkillInfoTable.role eq role }
             .mapNotNull { toSkillInfo(it) }
     }
 
@@ -44,7 +44,7 @@ class SkillInfoRepository : AbstractRepository() {
 
     private fun toSkillInfo(row: ResultRow) = SkillInfo(
         id = row[SkillInfoTable.id],
-        role = Role(row[SkillInfoTable.roleName]),
+        role = Role(row[SkillInfoTable.role]),
         name = row[SkillInfoTable.name],
         description = row[SkillInfoTable.description],
         maxLevel = row[SkillInfoTable.maxLevel],

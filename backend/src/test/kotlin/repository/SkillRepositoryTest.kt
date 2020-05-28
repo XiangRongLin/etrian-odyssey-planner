@@ -12,7 +12,6 @@ internal class SkillRepositoryTest : AbstractRepositoryTest() {
 
     private val repository = SkillRepository()
 
-
     @Test
     fun `getByCharacter(), invalid character`() = dbTest {
         val actual = repository.getByCharacter(-1)
@@ -30,7 +29,7 @@ internal class SkillRepositoryTest : AbstractRepositoryTest() {
 
     @Test
     fun `insertOrUpdate(), create single valid skill`() = dbTest {
-        repository.insertOrUpdate(character.id, listOf(Skill(3, 4)))
+        repository.insertOrUpdate(character.id, listOf(Skill(3, 4)), user.id)
         val actual = repository.getByCharacter(character.id)
 
         assertEquals(2, actual.size)
@@ -42,7 +41,7 @@ internal class SkillRepositoryTest : AbstractRepositoryTest() {
     fun `insertOrUpdate(), update level`() = dbTest {
         val skill = character.skills.first()
         val updatedSkill = Skill(skill.skillInfoId, skill.level + 1)
-        repository.insertOrUpdate(character.id, listOf(updatedSkill))
+        repository.insertOrUpdate(character.id, listOf(updatedSkill), user.id)
         val actual = repository.getByCharacter(character.id)
 
         assertEquals(1, actual.size)

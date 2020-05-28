@@ -31,20 +31,22 @@ fun Route.character(serviceLocator: ServiceLocator) {
             }
         }
 
-        get("/{id}") {
-            val id = checkNotNull(call.parameters["id"]).toInt()
-            val character = serviceLocator.characterService.get(id)
-            if (character != null) {
-                call.respond(character)
-            } else {
-                call.respond(HttpStatusCode.NotFound)
+        authenticate("jwt") {
+
+            get("/{id}") {
+                val id = checkNotNull(call.parameters["id"]).toInt()
+                val character = serviceLocator.characterService.get(id)
+                if (character != null) {
+                    call.respond(character)
+                } else {
+                    call.respond(HttpStatusCode.NotFound)
+                }
             }
         }
-
         authenticate("basicAuth") {
             post("/") {
                 val character: NewCharacter = call.receive()
-                call.respond(HttpStatusCode.OK, serviceLocator.characterService.create(character))
+                call.respond(HttpStatusCode.OK, serviceLocator.characterService.create(character, 1))//TODO
             }
         }
 
@@ -52,13 +54,13 @@ fun Route.character(serviceLocator: ServiceLocator) {
         put("/{id}") {
             val id = checkNotNull(call.parameters["id"]).toInt()
             val character: NewCharacter = call.receive()
-            serviceLocator.characterService.update(CharacterSummary(id, character))
+            serviceLocator.characterService.update(CharacterSummary(id, character), 1)//TODO
             call.respond(HttpStatusCode.OK)
         }
 
         delete("/{id}") {
             val id = checkNotNull(call.parameters["id"]).toInt()
-            serviceLocator.characterService.delete(id)
+            serviceLocator.characterService.delete(id, 1)//TODO
             call.respond(HttpStatusCode.NoContent)
         }
 
@@ -72,7 +74,7 @@ fun Route.character(serviceLocator: ServiceLocator) {
             patch("/") {
                 val id = call.getIntParameter("id")
                 val skills: List<Skill> = call.receive()
-                serviceLocator.skillService.update(id, skills)
+                serviceLocator.skillService.update(id, skills, 1)//TODO
                 call.respond(HttpStatusCode.OK)
             }
         }

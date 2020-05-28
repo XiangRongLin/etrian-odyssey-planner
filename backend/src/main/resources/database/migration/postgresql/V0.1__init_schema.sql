@@ -4,31 +4,39 @@ CREATE TABLE roles (
 );
 
 CREATE TABLE skill_infos (
-    id          int4         NOT NULL,
-    role_name   varchar(15)  NOT NULL,
+    id          INT4         NOT NULL,
+    role        varchar(15)  NOT NULL,
     name        varchar(30)  NOT NULL,
     description varchar(400) NOT NULL,
-    max_level   int4         NOT NULL,
+    max_level   INT4         NOT NULL,
     CONSTRAINT skill_infos_PK PRIMARY KEY (id),
-    CONSTRAINT skill_infos__role_name_FK FOREIGN KEY (role_name) REFERENCES roles (name) ON UPDATE CASCADE ON DELETE RESTRICT
+    CONSTRAINT skill_infos__role_name_FK FOREIGN KEY (role) REFERENCES roles (name) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
 CREATE TABLE skill_info_prerequisites (
-    skill_info_id      int4 NOT NULL,
-    prerequisite_id    int4 NOT NULL,
-    prerequisite_level int4 NOT NULL,
+    skill_info_id      INT4 NOT NULL,
+    prerequisite_id    INT4 NOT NULL,
+    prerequisite_level INT4 NOT NULL,
     CONSTRAINT skill_info_prerequisites__skill_info_id__prerequisite_id_UX UNIQUE (skill_info_id, prerequisite_id),
     CONSTRAINT skill_info_prerequisites__prerequisite_id_FK FOREIGN KEY (prerequisite_id) REFERENCES skill_infos (id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT skill_info_prerequisites__skill_info_id_FK FOREIGN KEY (skill_info_id) REFERENCES skill_infos (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 CREATE INDEX skill_info_prerequisites__skill_info_id_IX ON skill_info_prerequisites USING btree (skill_info_id);
 
+CREATE TABLE users (
+    id serial NOT NULL,
+    CONSTRAINT users__id_PK PRIMARY KEY (id)
+);
+
 CREATE TABLE characters (
-    id   serial      NOT NULL,
-    name VARCHAR(30) NOT NULL,
-    role VARCHAR(15) NOT NULL,
+    id      serial      NOT NULL,
+    name    VARCHAR(30) NOT NULL,
+    role    VARCHAR(15) NOT NULL,
+    user_id INT4        NOT NULL,
     CONSTRAINT characters_PK PRIMARY KEY (id),
-    CONSTRAINT characters_role__name_FK FOREIGN KEY (role) REFERENCES roles (name) ON UPDATE CASCADE ON DELETE RESTRICT
+    CONSTRAINT characters__role_FK FOREIGN KEY (role) REFERENCES roles (name) ON UPDATE CASCADE ON DELETE RESTRICT,
+    CONSTRAINT characters__user_id_FK FOREIGN KEY (user_id) REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE
+
 );
 
 CREATE TABLE skills (
@@ -41,9 +49,11 @@ CREATE TABLE skills (
 );
 
 CREATE TABLE parties (
-    id   serial      NOT NULL,
-    name VARCHAR(20) NOT NULL,
-    CONSTRAINT parties__id_PK PRIMARY KEY (id)
+    id      serial      NOT NULL,
+    name    VARCHAR(20) NOT NULL,
+    user_id INT4        NOT NULL,
+    CONSTRAINT parties__id_PK PRIMARY KEY (id),
+    CONSTRAINT parties__user_id_FK FOREIGN KEY (user_id) REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE party_members (

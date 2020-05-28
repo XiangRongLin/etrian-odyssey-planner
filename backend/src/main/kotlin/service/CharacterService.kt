@@ -5,7 +5,7 @@ import com.kaiserpudding.model.CharacterSummary
 import com.kaiserpudding.model.NewCharacter
 
 interface CharacterService {
-    suspend fun create(character: NewCharacter): Int
+    suspend fun create(character: NewCharacter, user: Int): Int
 
     suspend fun get(character: Int): CharacterDetail?
 
@@ -13,7 +13,7 @@ interface CharacterService {
 
     suspend fun getByName(name: String): List<CharacterSummary>
 
-    suspend fun update(characterSummary: CharacterSummary)
+    suspend fun update(characterSummary: CharacterSummary, user: Int)
 
-    suspend fun delete(id: Int): Boolean
+    suspend fun delete(id: Int, user: Int): Boolean
 }

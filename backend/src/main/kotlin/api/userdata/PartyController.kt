@@ -30,19 +30,19 @@ fun Route.party(serviceLocator: ServiceLocator) {
 
         post("/") {
             val party: NewParty = call.receive()
-            call.respond(HttpStatusCode.Created, serviceLocator.partyService.create(party))
+            call.respond(HttpStatusCode.Created, serviceLocator.partyService.create(party, 1))//TODO
         }
 
         put("/{id}") {
             val id = checkNotNull(call.parameters["id"]).toInt()
             val party: NewParty = call.receive()
-            serviceLocator.partyService.update(Party(id, party))
+            serviceLocator.partyService.update(Party(id, party), 1)//TODO
             call.respond(HttpStatusCode.OK)
         }
 
         delete("/{id}") {
             val id = checkNotNull(call.parameters["id"]).toInt()
-            check(serviceLocator.partyService.delete(id))
+            check(serviceLocator.partyService.delete(id, 1))//TODO
             call.respond(HttpStatusCode.OK)
         }
 
@@ -50,7 +50,7 @@ fun Route.party(serviceLocator: ServiceLocator) {
             patch("/") {
                 val partyId = checkNotNull(call.parameters["id"]).toInt()
                 val members = call.receive<List<NewPartyMember>>()
-                serviceLocator.partyService.updateMembers(partyId, members)
+                serviceLocator.partyService.updateMembers(partyId, members, 1)//TODO
                 call.respond(HttpStatusCode.OK)
             }
         }

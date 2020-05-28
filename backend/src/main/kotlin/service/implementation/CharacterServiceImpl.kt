@@ -14,8 +14,8 @@ internal class CharacterServiceImpl(
 ) :
     CharacterService {
 
-    override suspend fun create(character: NewCharacter): Int = dbQuery {
-        characterRepository.create(character)
+    override suspend fun create(character: NewCharacter, user: Int): Int = dbQuery {
+        characterRepository.create(character, user)
     }
 
     override suspend fun get(character: Int): CharacterDetail? = dbQuery {
@@ -30,11 +30,11 @@ internal class CharacterServiceImpl(
         characterRepository.getByName(name)
     }
 
-    override suspend fun update(characterSummary: CharacterSummary): Unit = dbQuery {
-        characterRepository.update(characterSummary)
+    override suspend fun update(characterSummary: CharacterSummary, user: Int): Unit = dbQuery {
+        characterRepository.update(characterSummary, user)
     }
 
-    override suspend fun delete(id: Int): Boolean = dbQuery {
-        characterRepository.delete(id)
+    override suspend fun delete(id: Int, user: Int): Boolean = dbQuery {
+        characterRepository.delete(id, user)
     }
 }

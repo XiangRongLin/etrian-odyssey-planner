@@ -5,7 +5,7 @@ import com.kaiserpudding.model.CharacterDetail
 import com.kaiserpudding.model.CharacterSummary
 import com.kaiserpudding.model.NewCharacter
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.deleteAll
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -14,9 +14,10 @@ import org.jetbrains.exposed.sql.update
 
 class CharacterRepository : AbstractRepository() {
 
-    fun create(character: NewCharacter): Int = CharacterTable.insert {
+    fun create(character: NewCharacter, user: Int): Int = CharacterTable.insert {
         it[name] = character.name
         it[role] = character.role
+        it[userId] = user
     }[CharacterTable.id]
 
     fun getAll(): List<CharacterSummary> = CharacterTable.selectAll().map { toCharacterSummary(it) }
@@ -51,13 +52,18 @@ class CharacterRepository : AbstractRepository() {
         skills = SkillRepository().getByCharacter(row[CharacterTable.id])
     )
 
-    fun update(characterSummary: CharacterSummary) {
-        CharacterTable.update({ CharacterTable.id eq characterSummary.id }) {
-            it[name] = characterSummary.name
-        }
+    fun update(characterSummary: CharacterSummary, user: Int) {
+        CharacterTable.verifyUser(characterSummary.id, user)
+            ?.update({ CharacterTable.id eq characterSummary.id }) {
+                it[name] = characterSummary.name
+            }
     }
 
-    fun delete(id: Int): Boolean = CharacterTable.deleteWhere { CharacterTable.id eq id } > 0
-
-    internal fun deleteAll() = CharacterTable.deleteAll()
+    fun delete(id: Int, user: Int): Boolean {
+        val count = CharacterTable.verifyUser(id, user)
+            ?.deleteWhere {
+                (CharacterTable.id eq id) and (CharacterTable.userId eq user)
+            }
+        return count == null || count > 0
+    }
 }
