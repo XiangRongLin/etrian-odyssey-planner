@@ -1,10 +1,10 @@
 /.gradle
 /.idea
-/out
-/build
+out/
+build/
 *.iml
 *.ipr
 *.iws
 
 uml/images/
-src/main/resources/database/config/hikari.properties
+hikari.properties
