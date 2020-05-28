@@ -9,7 +9,6 @@ import com.kaiserpudding.model.PartyMember
 import com.kaiserpudding.model.Position
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -18,9 +17,10 @@ import org.jetbrains.exposed.sql.update
 
 class PartyRepository : AbstractRepository() {
 
-    fun create(party: NewParty): Int {
+    fun create(party: NewParty, user: Int): Int {
         return PartyTable.insert {
             it[name] = party.name
+            it[userId] = user
         }[PartyTable.id]
     }
 
@@ -41,14 +41,19 @@ class PartyRepository : AbstractRepository() {
         members = getPartyMembers(row[PartyTable.id])
     )
 
-    fun update(party: Party) {
-        PartyTable.update({ PartyTable.id.eq(party.id) }) {
-            it[name] = party.name
-        }
+    fun update(party: Party, user: Int) {
+        PartyTable
+            .verifyUser(party.id, user)
+            ?.update({ PartyTable.id.eq(party.id) }) {
+                it[name] = party.name
+            }
     }
 
-    fun delete(id: Int): Boolean {
-        return PartyTable.deleteWhere { PartyTable.id.eq(id) } > 0
+    fun delete(id: Int, user: Int): Boolean {
+        val count = PartyTable
+            .verifyUser(id, user)
+            ?.deleteWhere { PartyTable.id.eq(id) }
+        return count == null || count > 0
     }
 
     private fun getPartyMembers(partyId: Int): List<PartyMember> {
@@ -62,7 +67,7 @@ class PartyRepository : AbstractRepository() {
             position = row[PartyMemberTable.position]
         )
 
-    internal fun createMember(party: Int, member: NewPartyMember) {
+    internal fun createMember(party: Int, member: NewPartyMember, user: Int) {
         PartyMemberTable.insert {
             it[partyId] = party
             it[memberId] = member.characterId
@@ -70,30 +75,32 @@ class PartyRepository : AbstractRepository() {
         }
     }
 
-    private fun updateMember(party: Int, member: NewPartyMember) {
-        PartyMemberTable.update({
-            (PartyMemberTable.partyId eq party) and
-                    (PartyMemberTable.memberId eq member.characterId)
-        }) {
-            it[position] = member.position
-        }
+    private fun updateMember(party: Int, member: NewPartyMember, user: Int) {
+        PartyMemberTable
+            .verifyUser(party, user)
+            ?.update({
+                ((PartyMemberTable.partyId eq party) and (PartyMemberTable.memberId eq member.characterId))
+            }) {
+                it[position] = member.position
+            }
     }
 
-    fun updateMembers(party: Int, members: List<NewPartyMember>) {
+    fun updateMembers(party: Int, members: List<NewPartyMember>, user: Int) {
         members.forEach { member ->
             if (member.position == Position.NOT_IN_PARTY) {
-                deleteMember(party, member.characterId)
+                deleteMember(party, member.characterId, user)
             } else {
-                updateMember(party, member)
+                updateMember(party, member, user)
             }
         }
     }
 
-    fun deleteMember(party: Int, character: Int): Boolean {
-        return PartyMemberTable.deleteWhere {
-            PartyMemberTable.partyId.eq(party).and(PartyMemberTable.memberId.eq(character))
-        } > 0
+    private fun deleteMember(party: Int, character: Int, user: Int): Boolean {
+        val count = PartyMemberTable
+            .verifyUser(party, user)
+            ?.deleteWhere {
+                (PartyMemberTable.partyId eq party) and (PartyMemberTable.memberId eq character)
+            }
+        return count == null || count > 0
     }
-
-    fun deleteAll() = PartyTable.deleteAll()
 }

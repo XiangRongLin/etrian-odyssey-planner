@@ -1,7 +1,8 @@
 package com.kaiserpudding.database
 
 import com.kaiserpudding.model.Position
-import org.jetbrains.exposed.sql.ReferenceOption
+import org.jetbrains.exposed.sql.ReferenceOption.CASCADE
+import org.jetbrains.exposed.sql.ReferenceOption.RESTRICT
 import org.jetbrains.exposed.sql.Table
 
 object RoleTable : Table("roles") {
@@ -11,10 +12,10 @@ object RoleTable : Table("roles") {
 
 object SkillInfoTable : Table("skill_infos") {
     val id = SkillInfoTable.integer("id")
-    val roleName = SkillInfoTable.varchar("role_name", 15).references(
+    val role = SkillInfoTable.varchar("role", 15).references(
         RoleTable.name,
-        onUpdate = ReferenceOption.CASCADE,
-        onDelete = ReferenceOption.RESTRICT
+        onUpdate = CASCADE,
+        onDelete = RESTRICT
     )
     val name = SkillInfoTable.varchar("name", 30)
     val description = SkillInfoTable.varchar("description", 400)
@@ -25,14 +26,14 @@ object SkillInfoTable : Table("skill_infos") {
 object SkillInfoPrerequisiteTable : Table("skill_info_prerequisites") {
     val skillInfoId = SkillInfoPrerequisiteTable.integer("skill_info_id").index().references(
         SkillInfoTable.id,
-        onUpdate = ReferenceOption.CASCADE,
-        onDelete = ReferenceOption.CASCADE
+        onUpdate = CASCADE,
+        onDelete = CASCADE
     )
     val prerequisiteId = SkillInfoPrerequisiteTable.integer("prerequisite_id")
         .references(
             SkillInfoTable.id,
-            onUpdate = ReferenceOption.CASCADE,
-            onDelete = ReferenceOption.CASCADE
+            onUpdate = CASCADE,
+            onDelete = CASCADE
         )
     val prerequisiteLevel = SkillInfoPrerequisiteTable.integer("prerequisite_level")
 
@@ -46,9 +47,11 @@ object CharacterTable : Table("characters") {
     val name = CharacterTable.varchar("name", 30)
     val role = CharacterTable.varchar("role", 15).references(
         RoleTable.name,
-        onUpdate = ReferenceOption.CASCADE,
-        onDelete = ReferenceOption.RESTRICT
+        onUpdate = CASCADE,
+        onDelete = RESTRICT
     )
+    val userId = CharacterTable.integer("user_id")
+        .references(UserTable.id, onUpdate = CASCADE, onDelete = CASCADE)
     override val primaryKey = PrimaryKey(id)
 
 }
@@ -56,15 +59,16 @@ object CharacterTable : Table("characters") {
 object PartyTable : Table("parties") {
     val id = PartyTable.integer("id").autoIncrement()
     val name = PartyTable.varchar("name", 20)
+    val userId = PartyTable.integer("user_id")
+        .references(UserTable.id, onUpdate = CASCADE, onDelete = CASCADE)
     override val primaryKey = PrimaryKey(id)
-
 }
 
 object PartyMemberTable : Table("party_members") {
     val partyId = PartyMemberTable.integer("party_id").index()
-        .references(PartyTable.id, onUpdate = ReferenceOption.CASCADE, onDelete = ReferenceOption.CASCADE)
+        .references(PartyTable.id, onUpdate = CASCADE, onDelete = CASCADE)
     val memberId = PartyMemberTable.integer("member_id")
-        .references(CharacterTable.id, onUpdate = ReferenceOption.CASCADE, onDelete = ReferenceOption.CASCADE)
+        .references(CharacterTable.id, onUpdate = CASCADE, onDelete = CASCADE)
     val position = PartyMemberTable.enumerationByName("position", 15, Position::class)
 
     init {
@@ -76,17 +80,22 @@ object PartyMemberTable : Table("party_members") {
 object SkillTable : Table("skills") {
     val skillInfoId = SkillTable.integer("skill_info_id").references(
         SkillInfoTable.id,
-        onUpdate = ReferenceOption.CASCADE,
-        onDelete = ReferenceOption.RESTRICT
+        onUpdate = CASCADE,
+        onDelete = RESTRICT
     )
     val level = SkillTable.integer("level")
     val characterId = SkillTable.integer("character_id").references(
         CharacterTable.id,
-        onUpdate = ReferenceOption.CASCADE,
-        onDelete = ReferenceOption.CASCADE
+        onUpdate = CASCADE,
+        onDelete = CASCADE
     )
 
     init {
         SkillTable.uniqueIndex(skillInfoId, characterId)
     }
+}
+
+object UserTable : Table("users") {
+    val id = UserTable.integer("id").autoIncrement()
+    override val primaryKey: PrimaryKey = PrimaryKey(id)
 }

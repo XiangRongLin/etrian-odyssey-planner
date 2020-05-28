@@ -1,5 +1,8 @@
 package com.kaiserpudding
 
+import com.auth0.jwt.JWT
+import com.auth0.jwt.JWTVerifier
+import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.kaiserpudding.api.gamedata.role
 import com.kaiserpudding.api.gamedata.skillInfo
@@ -16,6 +19,8 @@ import io.ktor.application.install
 import io.ktor.auth.Authentication
 import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.basic
+import io.ktor.auth.jwt.JWTPrincipal
+import io.ktor.auth.jwt.jwt
 import io.ktor.features.CORS
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.StatusPages
@@ -75,7 +80,19 @@ fun Application.module(testing: Boolean = false) {
                 }
             }
         }
+        val jwtIssuer = environment.config.property("jwt.domain").getString()
+        val jwtAudience = environment.config.property("jwt.audience").getString()
+        val jwtRealm = environment.config.property("jwt.realm").getString()
+        jwt(name = "jwt") {
+            realm = jwtRealm
+            verifier(makeJwtVerifier(jwtIssuer, jwtIssuer))
+            validate { credential ->
+                if (credential.payload.audience.contains(jwtAudience)) JWTPrincipal(credential.payload) else null
+            }
+        }
     }
+
+
 
     install(ContentNegotiation) {
         jackson {
@@ -142,4 +159,14 @@ data class MySession(val count: Int = 0)
 
 class AuthenticationException : RuntimeException()
 class AuthorizationException : RuntimeException()
+
+private val algorithm = Algorithm.HMAC256("secret")
+private fun makeJwtVerifier(issuer: String, audience: String): JWTVerifier {
+    val build = JWT
+        .require(algorithm)
+        .withAudience(audience)
+        .withIssuer(issuer)
+        .build()
+    return build
+}
 

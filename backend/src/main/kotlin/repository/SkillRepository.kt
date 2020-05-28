@@ -5,32 +5,25 @@ import com.kaiserpudding.model.Skill
 import com.kaiserpudding.model.SkillInfo
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.update
 
 class SkillRepository : AbstractRepository() {
 
-    internal fun create(character: Int, skill: Skill) {
+    internal fun create(character: Int, skill: Skill, user: Int) {
         val skillInfo = SkillInfoRepository().get(skill.skillInfoId)
         if (skillInfo == null || skill.level > skillInfo.maxLevel) {
             throw IllegalStateException()
         }
 
-        SkillTable.insert {
-            it[skillInfoId] = skill.skillInfoId
-            it[level] = skill.level
-            it[characterId] = character
-        }
+        SkillTable.verifyUser(character, user)
+            ?.insert {
+                it[skillInfoId] = skill.skillInfoId
+                it[level] = skill.level
+                it[characterId] = character
+            }
     }
-
-//    fun get(id: Int): Skill? {
-//        return SkillTable.select { SkillTable.id eq id }
-//            .limit(1)
-//            .mapNotNull { toSkill(it) }
-//            .singleOrNull()
-//    }
 
     /**
      * Returns all skills from the character with given id
@@ -47,16 +40,19 @@ class SkillRepository : AbstractRepository() {
             level = row[SkillTable.level]
         )
 
-    private fun updateLevel(character: Int, skill: Skill) =
-        SkillTable.update({ (SkillTable.characterId eq character) and (SkillTable.skillInfoId eq skill.skillInfoId) }) {
-            it[level] = skill.level
-        }
+    private fun updateLevel(character: Int, skill: Skill, user: Int): Int? {
+        return SkillTable.verifyUser(character, user)
+            ?.update({ (SkillTable.characterId eq character) and (SkillTable.skillInfoId eq skill.skillInfoId) }) {
+                it[level] = skill.level
+            }
+    }
 
-    fun insertOrUpdate(character: Int, skills: List<Skill>) {
+    fun insertOrUpdate(character: Int, skills: List<Skill>, user: Int) {
         skills.forEach { skill ->
-            val exists = updateLevel(character, skill) > 0
+            val count = updateLevel(character, skill, user) ?: return
+            val exists = count > 0
             if (!exists) {
-                create(character, skill)
+                create(character, skill, user)
             }
         }
         if (!checkSkillValid(character)) {
@@ -93,7 +89,4 @@ class SkillRepository : AbstractRepository() {
 
 
     private fun validSkillLevel(skill: Skill, skillInfo: SkillInfo) = skill.level >= skillInfo.maxLevel
-
-    internal fun deleteAll() = SkillTable.deleteAll()
-
 }

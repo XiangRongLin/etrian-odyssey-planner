@@ -13,7 +13,7 @@ internal class SkillInfoRepositoryTest : AbstractRepositoryTest() {
     fun getAll() = dbTest {
         val actual = repository.getAll()
 
-        assertEquals(495, actual.size)
+        assertEquals(494, actual.size)
     }
 
     @Test

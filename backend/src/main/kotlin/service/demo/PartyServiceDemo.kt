@@ -6,7 +6,7 @@ import com.kaiserpudding.model.Party
 import com.kaiserpudding.service.PartyService
 
 internal class PartyServiceDemo : PartyService {
-    override suspend fun create(party: NewParty): Int {
+    override suspend fun create(party: NewParty, user: Int): Int {
         TODO("Not yet implemented")
     }
 
@@ -18,15 +18,15 @@ internal class PartyServiceDemo : PartyService {
         TODO("Not yet implemented")
     }
 
-    override suspend fun update(party: Party) {
+    override suspend fun update(party: Party, user: Int) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun delete(party: Int): Boolean {
+    override suspend fun delete(party: Int, user: Int): Boolean {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateMembers(party: Int, members: List<NewPartyMember>) {
+    override suspend fun updateMembers(party: Int, members: List<NewPartyMember>, user: Int) {
         TODO("Not yet implemented")
     }
 }
