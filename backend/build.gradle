@@ -17,35 +17,30 @@ apply plugin: 'com.github.johnrengelman.shadow'
 group 'com.kaiserpudding'
 version '0.0.1'
 
-repositories {
-    mavenLocal()
-    jcenter()
-    maven { url 'https://kotlin.bintray.com/ktor' }
+allprojects {
+    repositories {
+        mavenLocal()
+        jcenter()
+        maven { url 'https://kotlin.bintray.com/ktor' }
+    }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "io.ktor:ktor-server-netty:$ktor_version"
-    implementation "ch.qos.logback:logback-classic:$logback_version"
-    implementation "io.ktor:ktor-server-core:$ktor_version"
-    implementation "io.ktor:ktor-freemarker:$ktor_version"
-    implementation "io.ktor:ktor-server-host-common:$ktor_version"
-    implementation "io.ktor:ktor-server-sessions:$ktor_version"
-    implementation "io.ktor:ktor-auth:$ktor_version"
-    implementation "io.ktor:ktor-auth-jwt:$ktor_version"
-    testImplementation "io.ktor:ktor-server-tests:$ktor_version"
-    implementation "io.ktor:ktor-jackson:$ktor_version"
-
-    implementation "org.jetbrains.exposed:exposed-core:$exposed_version"
-    implementation "org.jetbrains.exposed:exposed-jdbc:$exposed_version"
-    implementation 'org.postgresql:postgresql:42.2.12'
-    implementation 'com.h2database:h2:1.4.200'
-    implementation 'com.zaxxer:HikariCP:2.7.4'
-    implementation 'org.flywaydb:flyway-core:6.4.2'
-
     testImplementation 'org.junit.jupiter:junit-jupiter:5.6.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     testImplementation 'org.hamcrest:hamcrest:2.2'
+}
+
+
+dependencies {
+    implementation project(':services')
+    implementation project(':web')
+    implementation project(':shared')
+
+
+
+
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {

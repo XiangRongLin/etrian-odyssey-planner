@@ -1,4 +1,4 @@
 rootProject.name = "etrian-odyssey-planner"
-include 'etrian-odyssey-planner-services'
-include 'etrian-odyssey-planner-web'
-
+include 'services'
+include 'web'
+include 'shared'
