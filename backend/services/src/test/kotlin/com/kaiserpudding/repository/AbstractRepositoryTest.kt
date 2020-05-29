@@ -1,15 +1,6 @@
 package com.kaiserpudding.repository
 
-import com.kaiserpudding.model.CharacterDetail
-import com.kaiserpudding.model.CharacterSummary
-import com.kaiserpudding.model.NewCharacter
-import com.kaiserpudding.model.NewParty
-import com.kaiserpudding.model.NewPartyMember
-import com.kaiserpudding.model.Party
-import com.kaiserpudding.model.PartyMember
-import com.kaiserpudding.model.Position
-import com.kaiserpudding.model.Skill
-import com.kaiserpudding.model.User
+import com.kaiserpudding.model.*
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Schema
@@ -88,7 +79,7 @@ internal abstract class AbstractRepositoryTest {
         Companion.character = CharacterDetail(
             characterId,
             newCharacter.name,
-            newCharacter.role,
+            Role(newCharacter.role),
             listOf(skill)
         )
     }

@@ -11,7 +11,7 @@ data class CharacterSummary(
 data class CharacterDetail(
     val id: Int,
     val name: String,
-    val role: String,
+    val role: Role,
     val skills: List<Skill>
 )
 
