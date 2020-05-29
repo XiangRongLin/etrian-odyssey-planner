@@ -1,24 +1,33 @@
 package com.kaiserpudding.repository
 
+import com.kaiserpudding.SkillRestrictionException
 import com.kaiserpudding.database.SkillTable
 import com.kaiserpudding.model.Skill
 import com.kaiserpudding.model.SkillInfo
 import org.jetbrains.exposed.sql.*
+import java.lang.IllegalArgumentException
 
 class SkillRepository : AbstractRepository() {
 
+    /**
+     * Does not valide skill integrity
+     */
     internal fun create(character: Int, skill: Skill, user: Int) {
-        val skillInfo = SkillInfoRepository().get(skill.skillInfoId)
-        if (skillInfo == null || skill.level > skillInfo.maxLevel) {
-            throw IllegalStateException()
-        }
 
         SkillTable.verifyUser(character, user)
-                .insert {
-                    it[skillInfoId] = skill.skillInfoId
-                    it[level] = skill.level
-                    it[characterId] = character
-                }
+            .insert {
+                it[skillInfoId] = skill.skillInfoId
+                it[level] = skill.level
+                it[characterId] = character
+            }
+    }
+
+    private fun create(character: Int, skill: Skill) {
+        SkillTable.insert {
+            it[skillInfoId] = skill.skillInfoId
+            it[level] = skill.level
+            it[characterId] = character
+        }
     }
 
     /**
@@ -27,14 +36,14 @@ class SkillRepository : AbstractRepository() {
      */
     fun getByCharacter(character: Int): List<Skill> {
         return SkillTable.select { SkillTable.characterId eq character }
-                .mapNotNull { toSkill(it) }
+            .mapNotNull { toSkill(it) }
     }
 
     private fun toSkill(row: ResultRow): Skill =
-            Skill(
-                    skillInfoId = row[SkillTable.skillInfoId],
-                    level = row[SkillTable.level]
-            )
+        Skill(
+            skillInfoId = row[SkillTable.skillInfoId],
+            level = row[SkillTable.level]
+        )
 
     private fun updateLevel(character: Int, skill: Skill): Int {
         return SkillTable.update({ (SkillTable.characterId eq character) and (SkillTable.skillInfoId eq skill.skillInfoId) }) {
@@ -45,44 +54,48 @@ class SkillRepository : AbstractRepository() {
     fun insertOrUpdate(character: Int, skills: List<Skill>, user: Int) {
         SkillTable.verifyUser(character, user)
         skills.forEach { skill ->
-            val count = updateLevel(character, skill)
-            val exists = count > 0
-            if (!exists) {
-                create(character, skill, user)
+            if (skill.level == 0) {
+                delete(character, skill.skillInfoId)
+            } else {
+                val count = updateLevel(character, skill)
+                val exists = count > 0
+                if (!exists) {
+                    create(character, skill)
+                }
             }
         }
         if (!checkSkillValid(character)) {
-            throw IllegalStateException("Skill prerequisites are not fulfilled")
+            throw SkillRestrictionException()
         }
+    }
 
+    fun delete(character: Int, skillInfo: Int) {
+        SkillTable.deleteWhere { (SkillTable.characterId eq character) and (SkillTable.skillInfoId eq skillInfo) }
     }
 
     /**
-     * Checks if the skills saved in the com.kaiserpudding.database is valid.
+     * Checks if the skills saved in the database is valid.
      * The level of a skill should not be bigger than the maximum or negative
      * The prerequisites of each skills have to be learned to the minimum level.
      * */
-    private fun checkSkillValid(character: Int): Boolean {
-//        val skills = getByCharacter(character)
-//        val skillsMap = skills.map { skill -> skill.id to skill }.toMap()
-//        val skillInfosMap =
-//            SkillInfoRepository()
-//                .get(skills.map { it.skillInfoId }).map { skillInfo -> skillInfo.id to skillInfo }.toMap()
-//
-//        skills.forEach { skill ->
-//            val skillInfo = skillInfosMap.getValue(skill.skillInfoId)
-//            if (skill.level < 0 || skill.level > skillInfo.maxLevel) {
-//                return false
-//            }
-//            skillInfo.prerequisites?.forEach { prerequisite ->
-//                if (skillsMap.getOrElse(prerequisite.id) { return false }.level < prerequisite.level) {
-//                    return false
-//                }
-//            }
-//        }
+    private fun checkSkillValid(characterId: Int): Boolean {
+        val character = CharacterRepository().get(characterId)!!
+        val skills = getByCharacter(characterId)
+        val skillsMap = skills.map { skill -> skill.skillInfoId to skill }.toMap()
+        val skillInfosMap = SkillInfoRepository()
+            .get(skills.map { it.skillInfoId }).map { skillInfo -> skillInfo.id to skillInfo }.toMap()
+
+        skills.forEach { skill ->
+            val skillInfo = skillInfosMap.getValue(skill.skillInfoId)
+            if (character.role != skillInfo.role || skill.level < 0 || skill.level > skillInfo.maxLevel) {
+                return false
+            }
+            skillInfo.prerequisites?.forEach { prerequisite ->
+                if (skillsMap.getOrElse(prerequisite.id) { return false }.level < prerequisite.level) {
+                    return false
+                }
+            }
+        }
         return true
     }
-
-
-    private fun validSkillLevel(skill: Skill, skillInfo: SkillInfo) = skill.level >= skillInfo.maxLevel
 }
