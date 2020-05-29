@@ -145,6 +145,9 @@ fun Application.module(testing: Boolean = false) {
             exception<AuthorizationException> { cause ->
                 call.respond(HttpStatusCode.Forbidden)
             }
+            exception<UserAccessException> { cause ->
+                call.respond(HttpStatusCode.Forbidden, cause)
+            }
 
         }
     }

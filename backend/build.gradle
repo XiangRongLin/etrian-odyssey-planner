@@ -37,10 +37,6 @@ dependencies {
     implementation project(':services')
     implementation project(':web')
     implementation project(':shared')
-
-
-
-
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {

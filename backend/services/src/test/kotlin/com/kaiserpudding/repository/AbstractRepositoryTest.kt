@@ -50,7 +50,7 @@ internal abstract class AbstractRepositoryTest {
         val flyway = Flyway.configure()
             .dataSource(jdbcUrl, "", "")
             .schemas("mem")
-            .locations("database/migration/h2")
+            .locations("migration/h2")
             .load()
         flyway.migrate()
         initUserData()
