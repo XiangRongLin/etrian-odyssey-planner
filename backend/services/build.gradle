@@ -11,6 +11,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.6.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     testImplementation 'org.hamcrest:hamcrest:2.2'
+    implementation "ch.qos.logback:logback-classic:$logback_version"
 
     implementation "org.jetbrains.exposed:exposed-core:$exposed_version"
     implementation "org.jetbrains.exposed:exposed-jdbc:$exposed_version"

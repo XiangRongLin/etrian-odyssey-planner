@@ -38,16 +38,15 @@ class PartyRepository : AbstractRepository() {
     fun update(party: Party, user: Int) {
         PartyTable
             .verifyUser(party.id, user)
-            ?.update({ PartyTable.id.eq(party.id) }) {
+            .update({ PartyTable.id.eq(party.id) }) {
                 it[name] = party.name
             }
     }
 
     fun delete(id: Int, user: Int): Boolean {
-        val count = PartyTable
+        return PartyTable
             .verifyUser(id, user)
-            ?.deleteWhere { PartyTable.id.eq(id) }
-        return count == null || count > 0
+            .deleteWhere { PartyTable.id.eq(id) } > 0
     }
 
     private fun getPartyMembers(partyId: Int): List<PartyMember> {
@@ -72,7 +71,7 @@ class PartyRepository : AbstractRepository() {
     private fun updateMember(party: Int, member: NewPartyMember, user: Int) {
         PartyMemberTable
             .verifyUser(party, user)
-            ?.update({
+            .update({
                 ((PartyMemberTable.partyId eq party) and (PartyMemberTable.memberId eq member.characterId))
             }) {
                 it[position] = member.position
@@ -90,11 +89,10 @@ class PartyRepository : AbstractRepository() {
     }
 
     private fun deleteMember(party: Int, character: Int, user: Int): Boolean {
-        val count = PartyMemberTable
+        return PartyMemberTable
             .verifyUser(party, user)
-            ?.deleteWhere {
+            .deleteWhere {
                 (PartyMemberTable.partyId eq party) and (PartyMemberTable.memberId eq character)
-            }
-        return count == null || count > 0
+            } > 0
     }
 }

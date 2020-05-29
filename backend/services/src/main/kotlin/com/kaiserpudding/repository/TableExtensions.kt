@@ -1,5 +1,6 @@
 package com.kaiserpudding.repository
 
+import com.kaiserpudding.UserAccessException
 import com.kaiserpudding.database.CharacterTable
 import com.kaiserpudding.database.PartyMemberTable
 import com.kaiserpudding.database.PartyTable
@@ -13,12 +14,12 @@ private fun PartyTable.hasAccess(party: Int, user: Int): Boolean {
         .singleOrNull()?.get(userId) == user
 }
 
-fun PartyTable.verifyUser(party: Int, user: Int): PartyTable? {
-    return if (hasAccess(party, user)) this else null
+fun PartyTable.verifyUser(party: Int, user: Int): PartyTable {
+    return if (hasAccess(party, user)) this else throw UserAccessException()
 }
 
-fun PartyMemberTable.verifyUser(party: Int, user: Int): PartyMemberTable? {
-    return if (PartyTable.hasAccess(party, user)) this else null
+fun PartyMemberTable.verifyUser(party: Int, user: Int): PartyMemberTable {
+    return if (PartyTable.hasAccess(party, user)) this else throw UserAccessException()
 }
 
 private fun CharacterTable.hasAccess(character: Int, user: Int): Boolean {
@@ -27,10 +28,10 @@ private fun CharacterTable.hasAccess(character: Int, user: Int): Boolean {
         .singleOrNull()?.get(userId) == user
 }
 
-fun CharacterTable.verifyUser(character: Int, user: Int): CharacterTable? {
-    return if (hasAccess(character, user)) this else null
+fun CharacterTable.verifyUser(character: Int, user: Int): CharacterTable {
+    return if (hasAccess(character, user)) this else throw UserAccessException()
 }
 
-fun SkillTable.verifyUser(character: Int, user: Int): SkillTable? {
-    return if (CharacterTable.hasAccess(character, user)) this else null
+fun SkillTable.verifyUser(character: Int, user: Int): SkillTable {
+    return if (CharacterTable.hasAccess(character, user)) this else throw UserAccessException()
 }

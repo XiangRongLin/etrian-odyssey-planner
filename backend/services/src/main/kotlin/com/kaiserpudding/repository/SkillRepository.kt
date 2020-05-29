@@ -4,7 +4,6 @@ import com.kaiserpudding.database.SkillTable
 import com.kaiserpudding.model.Skill
 import com.kaiserpudding.model.SkillInfo
 import org.jetbrains.exposed.sql.*
-import kotlin.and
 
 class SkillRepository : AbstractRepository() {
 
@@ -15,11 +14,11 @@ class SkillRepository : AbstractRepository() {
         }
 
         SkillTable.verifyUser(character, user)
-            ?.insert {
-                it[skillInfoId] = skill.skillInfoId
-                it[level] = skill.level
-                it[characterId] = character
-            }
+                .insert {
+                    it[skillInfoId] = skill.skillInfoId
+                    it[level] = skill.level
+                    it[characterId] = character
+                }
     }
 
     /**
@@ -28,25 +27,25 @@ class SkillRepository : AbstractRepository() {
      */
     fun getByCharacter(character: Int): List<Skill> {
         return SkillTable.select { SkillTable.characterId eq character }
-            .mapNotNull { toSkill(it) }
+                .mapNotNull { toSkill(it) }
     }
 
     private fun toSkill(row: ResultRow): Skill =
-        Skill(
-            skillInfoId = row[SkillTable.skillInfoId],
-            level = row[SkillTable.level]
-        )
+            Skill(
+                    skillInfoId = row[SkillTable.skillInfoId],
+                    level = row[SkillTable.level]
+            )
 
-    private fun updateLevel(character: Int, skill: Skill, user: Int): Int? {
-        return SkillTable.verifyUser(character, user)
-            ?.update({ (SkillTable.characterId eq character) and (SkillTable.skillInfoId eq skill.skillInfoId) }) {
-                it[level] = skill.level
-            }
+    private fun updateLevel(character: Int, skill: Skill): Int {
+        return SkillTable.update({ (SkillTable.characterId eq character) and (SkillTable.skillInfoId eq skill.skillInfoId) }) {
+            it[level] = skill.level
+        }
     }
 
     fun insertOrUpdate(character: Int, skills: List<Skill>, user: Int) {
+        SkillTable.verifyUser(character, user)
         skills.forEach { skill ->
-            val count = updateLevel(character, skill, user) ?: return
+            val count = updateLevel(character, skill)
             val exists = count > 0
             if (!exists) {
                 create(character, skill, user)

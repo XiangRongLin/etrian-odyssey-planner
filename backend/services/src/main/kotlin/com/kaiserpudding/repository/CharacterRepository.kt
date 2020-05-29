@@ -4,7 +4,6 @@ import com.kaiserpudding.database.CharacterTable
 import com.kaiserpudding.model.CharacterDetail
 import com.kaiserpudding.model.CharacterSummary
 import com.kaiserpudding.model.NewCharacter
-import com.kaiserpudding.repository.AbstractRepository
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
@@ -55,16 +54,15 @@ class CharacterRepository : AbstractRepository() {
 
     fun update(characterSummary: CharacterSummary, user: Int) {
         CharacterTable.verifyUser(characterSummary.id, user)
-            ?.update({ CharacterTable.id eq characterSummary.id }) {
+            .update({ CharacterTable.id eq characterSummary.id }) {
                 it[name] = characterSummary.name
             }
     }
 
     fun delete(id: Int, user: Int): Boolean {
-        val count = CharacterTable.verifyUser(id, user)
-            ?.deleteWhere {
+        return CharacterTable.verifyUser(id, user)
+            .deleteWhere {
                 (CharacterTable.id eq id) and (CharacterTable.userId eq user)
-            }
-        return count == null || count > 0
+            } > 0
     }
 }
