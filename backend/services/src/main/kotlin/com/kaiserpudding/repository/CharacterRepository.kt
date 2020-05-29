@@ -4,6 +4,7 @@ import com.kaiserpudding.database.CharacterTable
 import com.kaiserpudding.model.CharacterDetail
 import com.kaiserpudding.model.CharacterSummary
 import com.kaiserpudding.model.NewCharacter
+import com.kaiserpudding.model.Role
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
@@ -48,7 +49,7 @@ class CharacterRepository : AbstractRepository() {
     private fun toCharacterDetail(row: ResultRow) = CharacterDetail(
         id = row[CharacterTable.id],
         name = row[CharacterTable.name],
-        role = row[CharacterTable.role],
+        role = Role(row[CharacterTable.role]),
         skills = SkillRepository().getByCharacter(row[CharacterTable.id])
     )
 
