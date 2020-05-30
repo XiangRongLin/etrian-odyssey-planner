@@ -5,13 +5,14 @@ import com.kaiserpudding.database.CharacterTable
 import com.kaiserpudding.database.PartyMemberTable
 import com.kaiserpudding.database.PartyTable
 import com.kaiserpudding.database.SkillTable
-import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 
 private fun PartyTable.hasAccess(party: Int, user: Int): Boolean {
-    return slice(userId)
-        .select { (id eq party) and (userId eq user) }
-        .singleOrNull()?.get(userId) == user
+    val row = slice(userId)
+        .select { id eq party }
+        .singleOrNull()
+        ?: return true
+    return row[userId] == user
 }
 
 fun PartyTable.verifyUser(party: Int, user: Int): PartyTable {
@@ -23,9 +24,11 @@ fun PartyMemberTable.verifyUser(party: Int, user: Int): PartyMemberTable {
 }
 
 private fun CharacterTable.hasAccess(character: Int, user: Int): Boolean {
-    return slice(userId)
-        .select { (id eq character) and (userId eq user) }
-        .singleOrNull()?.get(userId) == user
+    val row = slice(userId)
+        .select { id eq character }
+        .singleOrNull()
+        ?: return true
+    return row[userId] == user
 }
 
 fun CharacterTable.verifyUser(character: Int, user: Int): CharacterTable {
