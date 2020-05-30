@@ -3,6 +3,7 @@ package com.kaiserpudding.service.demo
 import com.kaiserpudding.model.CharacterDetail
 import com.kaiserpudding.model.CharacterSummary
 import com.kaiserpudding.model.NewCharacter
+import com.kaiserpudding.queryOptions.CharacterQueryOptions
 import com.kaiserpudding.service.CharacterService
 
 internal class CharacterServiceDemo : CharacterService {
@@ -18,7 +19,7 @@ internal class CharacterServiceDemo : CharacterService {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getByName(name: String): List<CharacterSummary> {
+    override suspend fun getBy(options: CharacterQueryOptions): List<CharacterSummary> {
         TODO("Not yet implemented")
     }
 
