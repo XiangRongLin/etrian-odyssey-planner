@@ -5,13 +5,8 @@ import com.kaiserpudding.model.CharacterDetail
 import com.kaiserpudding.model.CharacterSummary
 import com.kaiserpudding.model.NewCharacter
 import com.kaiserpudding.model.Role
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.update
+import com.kaiserpudding.queryOptions.CharacterQueryOptions
+import org.jetbrains.exposed.sql.*
 
 class CharacterRepository : AbstractRepository() {
 
@@ -28,15 +23,32 @@ class CharacterRepository : AbstractRepository() {
         .mapNotNull { toCharacterDetail(it) }
         .singleOrNull()
 
-    fun getNonNullable(id: Int): CharacterSummary {
+    internal fun getNonNullable(id: Int): CharacterSummary {
         return CharacterTable.select { CharacterTable.id eq id }
             .limit(1)
             .map { toCharacterSummary(it) }
             .single()
     }
 
+    fun getBy(queryOptions: CharacterQueryOptions): List<CharacterSummary> {
+        val where: SqlExpressionBuilder.() -> Op<Boolean> = {
+            val filters: MutableList<Op<Boolean>> = mutableListOf()
+            queryOptions.name?.let {
+                filters.add(CharacterTable.name.like("%$it%"))
+            }
+            var expression: Op<Boolean> = Op.TRUE
+            filters.forEach { op ->
+                expression = expression and op
+            }
+            expression
+        }
+
+        return CharacterTable.select(where).map { toCharacterSummary(it) }
+    }
+
     fun getByName(name: String): List<CharacterSummary> {
-        return CharacterTable.select { CharacterTable.name.like("%$name%") }
+        val where: SqlExpressionBuilder.() -> Op<Boolean> = { CharacterTable.name.like("%$name%") }
+        return CharacterTable.select(where)
             .map { toCharacterSummary(it) }
     }
 
