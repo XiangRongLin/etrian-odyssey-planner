@@ -13,7 +13,7 @@ internal abstract class AbstractRepositoryTest {
 
     protected val user: User
         get() = Companion.user
-    protected val party: Party
+    protected val party: PartyDetail
         get() = Companion.party
     protected val character: CharacterDetail
         get() = Companion.character
@@ -21,7 +21,7 @@ internal abstract class AbstractRepositoryTest {
     companion object {
         private var initialized = false
         private lateinit var user: User
-        private lateinit var party: Party
+        private lateinit var party: PartyDetail
         private lateinit var character: CharacterDetail
     }
 
@@ -71,7 +71,7 @@ internal abstract class AbstractRepositoryTest {
         val newMember = NewPartyMember(characterId, Position.FRONT_MIDDLE)
         partyRepository.createMember(partyId, newMember, userId)
 
-        Companion.party = Party(
+        Companion.party = PartyDetail(
             partyId,
             newParty.name,
             listOf(PartyMember(CharacterSummary(characterId, newCharacter), newMember.position))

@@ -2,19 +2,13 @@ package com.kaiserpudding.api.userdata
 
 import com.kaiserpudding.model.NewParty
 import com.kaiserpudding.model.NewPartyMember
-import com.kaiserpudding.model.Party
+import com.kaiserpudding.model.PartySummary
 import com.kaiserpudding.service.ServiceLocator
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
 import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.routing.delete
-import io.ktor.routing.get
-import io.ktor.routing.patch
-import io.ktor.routing.post
-import io.ktor.routing.put
-import io.ktor.routing.route
+import io.ktor.routing.*
 
 fun Route.party(serviceLocator: ServiceLocator) {
     route("api/party") {
@@ -36,7 +30,7 @@ fun Route.party(serviceLocator: ServiceLocator) {
         put("/{id}") {
             val id = checkNotNull(call.parameters["id"]).toInt()
             val party: NewParty = call.receive()
-            serviceLocator.partyService.update(Party(id, party), 1)//TODO
+            serviceLocator.partyService.update(PartySummary(id, party), 1)//TODO
             call.respond(HttpStatusCode.OK)
         }
 
