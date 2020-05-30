@@ -69,7 +69,7 @@ internal abstract class AbstractRepositoryTest {
         skillRepository.create(characterId, skill, userId)
 
         val newMember = NewPartyMember(characterId, Position.FRONT_MIDDLE)
-        partyRepository.createMember(partyId, newMember, userId)
+        partyRepository.createMember(partyId, newMember)
 
         Companion.party = PartyDetail(
             partyId,
