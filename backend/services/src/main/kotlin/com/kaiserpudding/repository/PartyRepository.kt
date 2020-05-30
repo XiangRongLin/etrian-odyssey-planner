@@ -61,7 +61,7 @@ class PartyRepository : AbstractRepository() {
             position = row[PartyMemberTable.position]
         )
 
-    internal fun createMember(party: Int, member: NewPartyMember, user: Int) {
+    internal fun createMember(party: Int, member: NewPartyMember) {
         PartyMemberTable.insert {
             it[partyId] = party
             it[memberId] = member.characterId
@@ -69,29 +69,29 @@ class PartyRepository : AbstractRepository() {
         }
     }
 
-    private fun updateMember(party: Int, member: NewPartyMember, user: Int) {
-        PartyMemberTable
-            .verifyUser(party, user)
-            .update({
-                ((PartyMemberTable.partyId eq party) and (PartyMemberTable.memberId eq member.characterId))
-            }) {
-                it[position] = member.position
-            }
-    }
+    private fun updateMember(party: Int, member: NewPartyMember): Int = PartyMemberTable
+        .update({
+            ((PartyMemberTable.partyId eq party) and (PartyMemberTable.memberId eq member.characterId))
+        }) {
+            it[position] = member.position
+        }
 
-    fun updateMembers(party: Int, members: List<NewPartyMember>, user: Int) {
+    fun insertOrUpdateMembers(party: Int, members: List<NewPartyMember>, user: Int) {
+        PartyTable.verifyUser(party, user)
         members.forEach { member ->
             if (member.position == Position.NOT_IN_PARTY) {
-                deleteMember(party, member.characterId, user)
+                deleteMember(party, member.characterId)
             } else {
-                updateMember(party, member, user)
+                val exists = updateMember(party, member) > 0
+                if (!exists) {
+                    createMember(party, member)
+                }
             }
         }
     }
 
-    private fun deleteMember(party: Int, character: Int, user: Int): Boolean {
+    private fun deleteMember(party: Int, character: Int): Boolean {
         return PartyMemberTable
-            .verifyUser(party, user)
             .deleteWhere {
                 (PartyMemberTable.partyId eq party) and (PartyMemberTable.memberId eq character)
             } > 0

@@ -31,6 +31,6 @@ internal class PartyServiceImpl(private val partyRepository: PartyRepository) : 
     }
 
     override suspend fun updateMembers(party: Int, members: List<NewPartyMember>, user: Int): Unit = dbQuery {
-        partyRepository.updateMembers(party, members, user)
+        partyRepository.insertOrUpdateMembers(party, members, user)
     }
 }
