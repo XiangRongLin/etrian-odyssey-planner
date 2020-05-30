@@ -3,9 +3,9 @@ package com.kaiserpudding.model
 data class CharacterSummary(
     val id: Int,
     val name: String,
-    val role: String
+    val role: Role
 ) {
-    constructor(id: Int, character: NewCharacter) : this(id, character.name, character.role)
+    constructor(id: Int, character: NewCharacter) : this(id, character.name, Role(character.role))
 }
 
 data class CharacterDetail(
