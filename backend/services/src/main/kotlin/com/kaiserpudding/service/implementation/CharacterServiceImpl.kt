@@ -6,13 +6,9 @@ import com.kaiserpudding.model.CharacterSummary
 import com.kaiserpudding.model.NewCharacter
 import com.kaiserpudding.queryOptions.CharacterQueryOptions
 import com.kaiserpudding.repository.CharacterRepository
-import com.kaiserpudding.repository.SkillRepository
 import com.kaiserpudding.service.CharacterService
 
-internal class CharacterServiceImpl(
-    private val characterRepository: CharacterRepository,
-    private val skillRepository: SkillRepository
-) :
+internal class CharacterServiceImpl(private val characterRepository: CharacterRepository) :
     CharacterService {
 
     override suspend fun create(character: NewCharacter, user: Int): Int = dbQuery {
