@@ -2,11 +2,7 @@ package com.kaiserpudding.repository
 
 import com.kaiserpudding.database.PartyMemberTable
 import com.kaiserpudding.database.PartyTable
-import com.kaiserpudding.model.NewParty
-import com.kaiserpudding.model.NewPartyMember
-import com.kaiserpudding.model.Party
-import com.kaiserpudding.model.PartyMember
-import com.kaiserpudding.model.Position
+import com.kaiserpudding.model.*
 import org.jetbrains.exposed.sql.*
 
 class PartyRepository : AbstractRepository() {
@@ -18,24 +14,29 @@ class PartyRepository : AbstractRepository() {
         }[PartyTable.id]
     }
 
-    fun getAll(): List<Party> {
-        return PartyTable.selectAll().map { toParty(it) }
+    fun getAll(): List<PartySummary> {
+        return PartyTable.selectAll().map { toPartySummary(it) }
     }
 
-    fun get(id: Int): Party? {
+    private fun toPartySummary(row: ResultRow) = PartySummary(
+        id = row[PartyTable.id],
+        name = row[PartyTable.name]
+    )
+
+    fun get(id: Int): PartyDetail? {
         return PartyTable.select { PartyTable.id.eq(id) }
             .limit(1)
-            .map { toParty(it) }
+            .map { toPartyDetail(it) }
             .singleOrNull()
     }
 
-    private fun toParty(row: ResultRow) = Party(
+    private fun toPartyDetail(row: ResultRow) = PartyDetail(
         id = row[PartyTable.id],
         name = row[PartyTable.name],
         members = getPartyMembers(row[PartyTable.id])
     )
 
-    fun update(party: Party, user: Int) {
+    fun update(party: PartySummary, user: Int) {
         PartyTable
             .verifyUser(party.id, user)
             .update({ PartyTable.id.eq(party.id) }) {
