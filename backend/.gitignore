@@ -8,3 +8,4 @@ build/
 
 uml/images/
 hikari.properties
+application.conf
