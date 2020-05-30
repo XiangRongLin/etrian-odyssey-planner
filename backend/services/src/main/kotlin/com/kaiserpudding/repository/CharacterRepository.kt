@@ -43,7 +43,7 @@ class CharacterRepository : AbstractRepository() {
     private fun toCharacterSummary(row: ResultRow) = CharacterSummary(
         id = row[CharacterTable.id],
         name = row[CharacterTable.name],
-        role = Role(row[CharacterTable.role])
+        role = row[CharacterTable.role]
     )
 
     private fun toCharacterDetail(row: ResultRow) = CharacterDetail(

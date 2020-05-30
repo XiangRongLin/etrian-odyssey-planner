@@ -5,7 +5,8 @@ data class CharacterSummary(
     val name: String,
     val role: Role
 ) {
-    constructor(id: Int, character: NewCharacter) : this(id, character.name, Role(character.role))
+    constructor(id: Int, name: String, role: String) : this(id, name, Role(role))
+    constructor(id: Int, character: NewCharacter) : this(id, character.name, character.role)
 }
 
 data class CharacterDetail(
