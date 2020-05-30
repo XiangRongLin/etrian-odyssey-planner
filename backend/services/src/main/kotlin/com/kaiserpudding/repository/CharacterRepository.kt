@@ -34,7 +34,13 @@ class CharacterRepository : AbstractRepository() {
         val where: SqlExpressionBuilder.() -> Op<Boolean> = {
             val filters: MutableList<Op<Boolean>> = mutableListOf()
             queryOptions.name?.let {
-                filters.add(CharacterTable.name.like("%$it%"))
+                filters.add(CharacterTable.name.lowerCase() like "%${it.toLowerCase()}%")
+            }
+            queryOptions.role?.let {
+                filters.add(CharacterTable.role eq it)
+            }
+            queryOptions.user?.let {
+                filters.add(CharacterTable.userId eq it)
             }
             var expression: Op<Boolean> = Op.TRUE
             filters.forEach { op ->
@@ -69,6 +75,7 @@ class CharacterRepository : AbstractRepository() {
         CharacterTable.verifyUser(characterSummary.id, user)
             .update({ CharacterTable.id eq characterSummary.id }) {
                 it[name] = characterSummary.name
+                it[role] = characterSummary.role.name
             }
     }
 
