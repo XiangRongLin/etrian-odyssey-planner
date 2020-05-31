@@ -4,19 +4,14 @@ import com.kaiserpudding.extension.getIntParameter
 import com.kaiserpudding.model.CharacterSummary
 import com.kaiserpudding.model.NewCharacter
 import com.kaiserpudding.model.Skill
+import com.kaiserpudding.queryOptions.CharacterQueryOptions
 import com.kaiserpudding.service.ServiceLocator
 import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
 import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.routing.delete
-import io.ktor.routing.get
-import io.ktor.routing.patch
-import io.ktor.routing.post
-import io.ktor.routing.put
-import io.ktor.routing.route
+import io.ktor.routing.*
 
 fun Route.character(serviceLocator: ServiceLocator) {
     route("api/character") {
@@ -27,7 +22,7 @@ fun Route.character(serviceLocator: ServiceLocator) {
             if (name.isNullOrEmpty()) {
                 call.respond(serviceLocator.characterService.getAll())
             } else {
-                call.respond(serviceLocator.characterService.getByName(name))
+                call.respond(serviceLocator.characterService.getBy(CharacterQueryOptions(name = name)))
             }
         }
 
