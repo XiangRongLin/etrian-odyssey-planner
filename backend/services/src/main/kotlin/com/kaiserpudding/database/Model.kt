@@ -36,13 +36,7 @@ object SkillInfoPrerequisiteTable : Table("skill_info_prerequisites") {
             onDelete = CASCADE
         )
     val prerequisiteLevel = SkillInfoPrerequisiteTable.integer("prerequisite_level")
-
-    init {
-        SkillInfoPrerequisiteTable.uniqueIndex(
-            skillInfoId,
-            prerequisiteId
-        )
-    }
+    override val primaryKey: PrimaryKey = PrimaryKey(skillInfoId, prerequisiteId)
 }
 
 object CharacterTable : Table("characters") {
@@ -73,12 +67,9 @@ object PartyMemberTable : Table("party_members") {
     val memberId = PartyMemberTable.integer("member_id")
         .references(CharacterTable.id, onUpdate = CASCADE, onDelete = CASCADE)
     val position = PartyMemberTable.enumerationByName("position", 15, Position::class)
+    override val primaryKey = PrimaryKey(partyId, memberId)
 
     init {
-        PartyMemberTable.uniqueIndex(
-            partyId,
-            memberId
-        )
         PartyMemberTable.uniqueIndex(
             partyId,
             position
@@ -98,13 +89,7 @@ object SkillTable : Table("skills") {
         onUpdate = CASCADE,
         onDelete = CASCADE
     )
-
-    init {
-        SkillTable.uniqueIndex(
-            skillInfoId,
-            characterId
-        )
-    }
+    override val primaryKey = PrimaryKey(skillInfoId, characterId)
 }
 
 object UserTable : Table("users") {
