@@ -9,6 +9,7 @@ interface ServiceLocator {
     val roleService: RoleService
     val skillInfoService: SkillInfoService
     val skillService: SkillService
+    val userService: UserService
 
     companion object {
         fun getDemoServiceLocator(): ServiceLocator {
