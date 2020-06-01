@@ -52,12 +52,6 @@ class CharacterRepository : AbstractRepository() {
         return CharacterTable.select(where).map { toCharacterSummary(it) }
     }
 
-    fun getByName(name: String): List<CharacterSummary> {
-        val where: SqlExpressionBuilder.() -> Op<Boolean> = { CharacterTable.name.like("%$name%") }
-        return CharacterTable.select(where)
-            .map { toCharacterSummary(it) }
-    }
-
     private fun toCharacterSummary(row: ResultRow) = CharacterSummary(
         id = row[CharacterTable.id],
         name = row[CharacterTable.name],

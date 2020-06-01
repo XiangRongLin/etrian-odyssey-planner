@@ -56,7 +56,7 @@ internal abstract class AbstractRepositoryTest {
         val characterRepository = CharacterRepository()
         val skillRepository = SkillRepository()
 
-        val userId = userRepository.create()
+        val userId = userRepository.create("jwt")
         Companion.user = User(userId)
 
         val newParty = NewParty("Dead End")

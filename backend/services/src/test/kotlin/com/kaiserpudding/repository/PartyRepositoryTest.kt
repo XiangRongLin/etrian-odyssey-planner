@@ -132,7 +132,7 @@ internal class PartyRepositoryTest : AbstractRepositoryTest() {
 
     @Test
     fun `updateMember(), add character from other user to own party`() = dbTest {
-        val userId = UserRepository().create()
+        val userId = UserRepository().create("jwt2")
         val partyId = PartyRepository().create(NewParty("name"), userId)
         val member = NewPartyMember(character.id, Position.BACK_LEFT)
         repository.insertOrUpdateMembers(partyId, listOf(member), userId)
