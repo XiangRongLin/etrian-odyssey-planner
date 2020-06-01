@@ -6,11 +6,16 @@ import com.kaiserpudding.model.NewPartyMember
 import com.kaiserpudding.model.PartyDetail
 import com.kaiserpudding.model.PartySummary
 import com.kaiserpudding.repository.PartyRepository
+import com.kaiserpudding.repository.UserRepository
 import com.kaiserpudding.service.PartyService
 
-internal class PartyServiceImpl(private val partyRepository: PartyRepository) : PartyService {
+internal class PartyServiceImpl(
+    private val partyRepository: PartyRepository,
+    private val userRepository: UserRepository
+) : PartyService {
 
-    override suspend fun create(party: NewParty, user: Int): Int = dbQuery {
+    override suspend fun create(party: NewParty, jwtId: String): Int = dbQuery {
+        val user = userRepository.resolveId(jwtId)
         partyRepository.create(party, user)
     }
 
@@ -22,15 +27,18 @@ internal class PartyServiceImpl(private val partyRepository: PartyRepository) : 
         partyRepository.getAll()
     }
 
-    override suspend fun update(party: PartySummary, user: Int): Unit = dbQuery {
+    override suspend fun update(party: PartySummary, jwtId: String): Unit = dbQuery {
+        val user = userRepository.resolveId(jwtId)
         partyRepository.update(party, user)
     }
 
-    override suspend fun delete(party: Int, user: Int): Boolean = dbQuery {
+    override suspend fun delete(party: Int, jwtId: String): Boolean = dbQuery {
+        val user = userRepository.resolveId(jwtId)
         partyRepository.delete(party, user)
     }
 
-    override suspend fun updateMembers(party: Int, members: List<NewPartyMember>, user: Int): Unit = dbQuery {
+    override suspend fun updateMembers(party: Int, members: List<NewPartyMember>, jwtId: String): Unit = dbQuery {
+        val user = userRepository.resolveId(jwtId)
         partyRepository.insertOrUpdateMembers(party, members, user)
     }
 }
