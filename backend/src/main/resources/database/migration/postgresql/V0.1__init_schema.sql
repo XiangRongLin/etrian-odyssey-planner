@@ -23,20 +23,12 @@ CREATE TABLE skill_info_prerequisites (
 );
 CREATE INDEX skill_info_prerequisites__skill_info_id_IX ON skill_info_prerequisites USING btree (skill_info_id);
 
-CREATE TABLE users (
-    id SERIAL NOT NULL,
-    CONSTRAINT users__id_PK PRIMARY KEY (id)
-);
-
 CREATE TABLE characters (
     id      SERIAL      NOT NULL,
     name    VARCHAR(30) NOT NULL,
     role    VARCHAR(15) NOT NULL,
-    user_id INT4        NOT NULL,
     CONSTRAINT characters_PK PRIMARY KEY (id),
-    CONSTRAINT characters__role_FK FOREIGN KEY (role) REFERENCES roles (name) ON UPDATE CASCADE ON DELETE RESTRICT,
-    CONSTRAINT characters__user_id_FK FOREIGN KEY (user_id) REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE
-
+    CONSTRAINT characters__role_FK FOREIGN KEY (role) REFERENCES roles (name) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
 CREATE TABLE skills (
@@ -51,9 +43,7 @@ CREATE TABLE skills (
 CREATE TABLE parties (
     id      SERIAL      NOT NULL,
     name    VARCHAR(20) NOT NULL,
-    user_id INT4        NOT NULL,
-    CONSTRAINT parties__id_PK PRIMARY KEY (id),
-    CONSTRAINT parties__user_id_FK FOREIGN KEY (user_id) REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE
+    CONSTRAINT parties__id_PK PRIMARY KEY (id)
 );
 
 CREATE TABLE party_members (
