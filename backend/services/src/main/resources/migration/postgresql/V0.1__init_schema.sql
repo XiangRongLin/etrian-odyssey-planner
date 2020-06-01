@@ -28,9 +28,13 @@ CREATE INDEX skill_info_prerequisites__skill_info_id_ix ON skill_info_prerequisi
 
 CREATE TABLE users
 (
-    id SERIAL NOT NULL,
-    CONSTRAINT users__id_pk PRIMARY KEY (id)
+    id     SERIAL      NOT NULL,
+    jwt_id VARCHAR(40) NOT NULL,
+    CONSTRAINT users__id_pk PRIMARY KEY (id),
+    CONSTRAINT users__id_ux UNIQUE (jwt_id)
 );
+CREATE INDEX users__jwt_id_ix ON users USING btree (jwt_id);
+
 
 CREATE TABLE characters
 (
