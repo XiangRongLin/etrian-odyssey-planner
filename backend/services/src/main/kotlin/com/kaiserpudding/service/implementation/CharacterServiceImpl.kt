@@ -6,12 +6,17 @@ import com.kaiserpudding.model.CharacterSummary
 import com.kaiserpudding.model.NewCharacter
 import com.kaiserpudding.queryOptions.CharacterQueryOptions
 import com.kaiserpudding.repository.CharacterRepository
+import com.kaiserpudding.repository.UserRepository
 import com.kaiserpudding.service.CharacterService
 
-internal class CharacterServiceImpl(private val characterRepository: CharacterRepository) :
+internal class CharacterServiceImpl(
+    private val characterRepository: CharacterRepository,
+    private val userRepository: UserRepository
+) :
     CharacterService {
 
-    override suspend fun create(character: NewCharacter, user: Int): Int = dbQuery {
+    override suspend fun create(character: NewCharacter, jwtId: String): Int = dbQuery {
+        val user = userRepository.resolveId(jwtId)
         characterRepository.create(character, user)
     }
 
@@ -27,11 +32,13 @@ internal class CharacterServiceImpl(private val characterRepository: CharacterRe
         characterRepository.getBy(options)
     }
 
-    override suspend fun update(characterSummary: CharacterSummary, user: Int): Unit = dbQuery {
+    override suspend fun update(characterSummary: CharacterSummary, jwtId: String): Unit = dbQuery {
+        val user = userRepository.resolveId(jwtId)
         characterRepository.update(characterSummary, user)
     }
 
-    override suspend fun delete(id: Int, user: Int): Boolean = dbQuery {
+    override suspend fun delete(id: Int, jwtId: String): Boolean = dbQuery {
+        val user = userRepository.resolveId(jwtId)
         characterRepository.delete(id, user)
     }
 }
