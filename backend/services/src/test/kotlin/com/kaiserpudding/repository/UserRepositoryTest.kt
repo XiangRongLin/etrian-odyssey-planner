@@ -12,7 +12,7 @@ internal class UserRepositoryTest : AbstractRepositoryTest() {
 
     @Test
     fun createAndGet() = dbTest {
-        val userId = repository.create()
+        val userId = repository.create("jwt2")
         val actual = repository.get(userId)
 
         assertTrue(actual != null)
