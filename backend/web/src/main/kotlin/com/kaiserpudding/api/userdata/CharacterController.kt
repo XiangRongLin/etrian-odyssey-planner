@@ -1,6 +1,7 @@
 package com.kaiserpudding.api.userdata
 
 import com.kaiserpudding.extension.getIntParameter
+import com.kaiserpudding.extension.jwtSubject
 import com.kaiserpudding.model.CharacterSummary
 import com.kaiserpudding.model.NewCharacter
 import com.kaiserpudding.model.Skill
@@ -26,37 +27,34 @@ fun Route.character(serviceLocator: ServiceLocator) {
             }
         }
 
-        authenticate("jwt") {
 
-            get("/{id}") {
-                val id = checkNotNull(call.parameters["id"]).toInt()
-                val character = serviceLocator.characterService.get(id)
-                if (character != null) {
-                    call.respond(character)
-                } else {
-                    call.respond(HttpStatusCode.NotFound)
-                }
+        get("/{id}") {
+            val id = checkNotNull(call.parameters["id"]).toInt()
+            val character = serviceLocator.characterService.get(id)
+            if (character != null) {
+                call.respond(character)
+            } else {
+                call.respond(HttpStatusCode.NotFound)
             }
         }
-        authenticate("basicAuth") {
+        authenticate("jwt") {
             post("/") {
                 val character: NewCharacter = call.receive()
-                call.respond(HttpStatusCode.OK, serviceLocator.characterService.create(character, "1"))//TODO
+                call.respond(HttpStatusCode.OK, serviceLocator.characterService.create(character, call.jwtSubject()))
             }
-        }
 
+            put("/{id}") {
+                val id = checkNotNull(call.parameters["id"]).toInt()
+                val character: NewCharacter = call.receive()
+                serviceLocator.characterService.update(CharacterSummary(id, character), call.jwtSubject())
+                call.respond(HttpStatusCode.OK)
+            }
 
-        put("/{id}") {
-            val id = checkNotNull(call.parameters["id"]).toInt()
-            val character: NewCharacter = call.receive()
-            serviceLocator.characterService.update(CharacterSummary(id, character), "1")//TODO
-            call.respond(HttpStatusCode.OK)
-        }
-
-        delete("/{id}") {
-            val id = checkNotNull(call.parameters["id"]).toInt()
-            serviceLocator.characterService.delete(id, "1")//TODO
-            call.respond(HttpStatusCode.NoContent)
+            delete("/{id}") {
+                val id = checkNotNull(call.parameters["id"]).toInt()
+                serviceLocator.characterService.delete(id, "1")//TODO
+                call.respond(HttpStatusCode.NoContent)
+            }
         }
 
         route("{id}/skill") {
@@ -66,12 +64,15 @@ fun Route.character(serviceLocator: ServiceLocator) {
                 call.respond(serviceLocator.skillService.getByCharacter(id))
             }
 
-            patch("/") {
-                val id = call.getIntParameter("id")
-                val skills: List<Skill> = call.receive()
-                serviceLocator.skillService.update(id, skills, "1")//TODO
-                call.respond(HttpStatusCode.OK)
+            authenticate {
+                patch("/") {
+                    val id = call.getIntParameter("id")
+                    val skills: List<Skill> = call.receive()
+                    serviceLocator.skillService.update(id, skills, "1")//TODO
+                    call.respond(HttpStatusCode.OK)
+                }
             }
+
         }
     }
 }
