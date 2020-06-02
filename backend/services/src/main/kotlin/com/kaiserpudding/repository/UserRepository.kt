@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.select
 
 class UserRepository : AbstractRepository() {
     fun create(jwt: String): Int = UserTable.insert {
-        it[jwtId] = jwt
+        it[jwtSubject] = jwt
     }[UserTable.id]
 
     fun get(id: Int): User? = UserTable
@@ -17,8 +17,8 @@ class UserRepository : AbstractRepository() {
         .singleOrNull()
 
 
-    fun resolveId(jwtId: String): Int = UserTable
-        .select { UserTable.jwtId eq jwtId }
+    fun resolveSubject(jwtSubject: String): Int = UserTable
+        .select { UserTable.jwtSubject eq jwtSubject }
         .single()[UserTable.id]
 
     private fun toUser(row: ResultRow) = User(

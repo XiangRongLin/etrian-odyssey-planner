@@ -29,7 +29,7 @@ internal class UserRepositoryTest : AbstractRepositoryTest() {
 
     @Test
     fun resolveId() = dbTest {
-        val actual = repository.resolveId("jwt")
+        val actual = repository.resolveSubject("jwt")
 
         assertEquals(user.id, actual)
     }
@@ -37,7 +37,7 @@ internal class UserRepositoryTest : AbstractRepositoryTest() {
     @Test
     fun `resolveId(), non-existent`() = dbTest {
         assertThrows<NoSuchElementException> {
-            repository.resolveId("abcdefg")
+            repository.resolveSubject("abcdefg")
         }
     }
 }

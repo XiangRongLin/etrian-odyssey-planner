@@ -4,7 +4,7 @@ import com.kaiserpudding.model.Skill
 import com.kaiserpudding.service.SkillService
 
 class SkillServiceDemo : SkillService {
-    override suspend fun update(character: Int, skills: List<Skill>, jwtId: String) {
+    override suspend fun update(character: Int, skills: List<Skill>, jwtSubject: String) {
         TODO("Not yet implemented")
     }
 

@@ -7,7 +7,7 @@ import com.kaiserpudding.queryOptions.CharacterQueryOptions
 import com.kaiserpudding.service.CharacterService
 
 internal class CharacterServiceDemo : CharacterService {
-    override suspend fun create(character: NewCharacter, jwtId: String): Int {
+    override suspend fun create(character: NewCharacter, jwtSubject: String): Int {
         TODO("Not yet implemented")
     }
 
@@ -23,11 +23,11 @@ internal class CharacterServiceDemo : CharacterService {
         TODO("Not yet implemented")
     }
 
-    override suspend fun update(characterSummary: CharacterSummary, jwtId: String) {
+    override suspend fun update(characterSummary: CharacterSummary, jwtSubject: String) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun delete(id: Int, jwtId: String): Boolean {
+    override suspend fun delete(id: Int, jwtSubject: String): Boolean {
         TODO("Not yet implemented")
     }
 }

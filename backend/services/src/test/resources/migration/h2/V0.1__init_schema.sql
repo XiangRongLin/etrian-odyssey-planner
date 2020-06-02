@@ -27,12 +27,12 @@ CREATE INDEX skill_info_prerequisites__skill_info_id_ix ON skill_info_prerequisi
 
 CREATE TABLE users
 (
-    id     INT4        NOT NULL AUTO_INCREMENT,
-    jwt_id VARCHAR(40) NOT NULL,
+    id          INT4        NOT NULL AUTO_INCREMENT,
+    jwt_subject VARCHAR(40) NOT NULL,
     CONSTRAINT users__id_pk PRIMARY KEY (id),
-    CONSTRAINT users__id_ux UNIQUE (jwt_id)
+    CONSTRAINT users__jwt_subject_ux UNIQUE (jwt_subject)
 );
-CREATE INDEX users__jwt_id_ix ON users (jwt_id);
+CREATE INDEX users__jwt_subject_ix ON users (jwt_subject);
 
 
 CREATE TABLE characters

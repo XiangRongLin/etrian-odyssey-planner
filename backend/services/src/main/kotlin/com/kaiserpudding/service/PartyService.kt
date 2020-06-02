@@ -6,15 +6,15 @@ import com.kaiserpudding.model.PartyDetail
 import com.kaiserpudding.model.PartySummary
 
 interface PartyService {
-    suspend fun create(party: NewParty, jwtId: String): Int
+    suspend fun create(party: NewParty, jwtSubject: String): Int
 
     suspend fun get(party: Int): PartyDetail?
 
     suspend fun getAll(): List<PartySummary>
 
-    suspend fun update(party: PartySummary, jwtId: String)
+    suspend fun update(party: PartySummary, jwtSubject: String)
 
-    suspend fun delete(party: Int, jwtId: String): Boolean
+    suspend fun delete(party: Int, jwtSubject: String): Boolean
 
-    suspend fun updateMembers(party: Int, members: List<NewPartyMember>, jwtId: String)
+    suspend fun updateMembers(party: Int, members: List<NewPartyMember>, jwtSubject: String)
 }

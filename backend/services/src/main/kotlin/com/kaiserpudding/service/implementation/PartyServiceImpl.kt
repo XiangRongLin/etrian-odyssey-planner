@@ -14,8 +14,8 @@ internal class PartyServiceImpl(
     private val userRepository: UserRepository
 ) : PartyService {
 
-    override suspend fun create(party: NewParty, jwtId: String): Int = dbQuery {
-        val user = userRepository.resolveId(jwtId)
+    override suspend fun create(party: NewParty, jwtSubject: String): Int = dbQuery {
+        val user = userRepository.resolveSubject(jwtSubject)
         partyRepository.create(party, user)
     }
 
@@ -27,18 +27,18 @@ internal class PartyServiceImpl(
         partyRepository.getAll()
     }
 
-    override suspend fun update(party: PartySummary, jwtId: String): Unit = dbQuery {
-        val user = userRepository.resolveId(jwtId)
+    override suspend fun update(party: PartySummary, jwtSubject: String): Unit = dbQuery {
+        val user = userRepository.resolveSubject(jwtSubject)
         partyRepository.update(party, user)
     }
 
-    override suspend fun delete(party: Int, jwtId: String): Boolean = dbQuery {
-        val user = userRepository.resolveId(jwtId)
+    override suspend fun delete(party: Int, jwtSubject: String): Boolean = dbQuery {
+        val user = userRepository.resolveSubject(jwtSubject)
         partyRepository.delete(party, user)
     }
 
-    override suspend fun updateMembers(party: Int, members: List<NewPartyMember>, jwtId: String): Unit = dbQuery {
-        val user = userRepository.resolveId(jwtId)
+    override suspend fun updateMembers(party: Int, members: List<NewPartyMember>, jwtSubject: String): Unit = dbQuery {
+        val user = userRepository.resolveSubject(jwtSubject)
         partyRepository.insertOrUpdateMembers(party, members, user)
     }
 }

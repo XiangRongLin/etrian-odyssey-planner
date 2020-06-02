@@ -8,8 +8,8 @@ import com.kaiserpudding.service.SkillService
 
 class SkillServiceImpl(private val skillRepository: SkillRepository, private val userRepository: UserRepository) :
     SkillService {
-    override suspend fun update(character: Int, skills: List<Skill>, jwtId: String): Unit = dbQuery {
-        val user = userRepository.resolveId(jwtId)
+    override suspend fun update(character: Int, skills: List<Skill>, jwtSubject: String): Unit = dbQuery {
+        val user = userRepository.resolveSubject(jwtSubject)
         skillRepository.insertOrUpdate(character, skills, user)
     }
 

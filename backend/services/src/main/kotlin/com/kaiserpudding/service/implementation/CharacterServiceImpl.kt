@@ -15,8 +15,8 @@ internal class CharacterServiceImpl(
 ) :
     CharacterService {
 
-    override suspend fun create(character: NewCharacter, jwtId: String): Int = dbQuery {
-        val user = userRepository.resolveId(jwtId)
+    override suspend fun create(character: NewCharacter, jwtSubject: String): Int = dbQuery {
+        val user = userRepository.resolveSubject(jwtSubject)
         characterRepository.create(character, user)
     }
 
@@ -32,13 +32,13 @@ internal class CharacterServiceImpl(
         characterRepository.getBy(options)
     }
 
-    override suspend fun update(characterSummary: CharacterSummary, jwtId: String): Unit = dbQuery {
-        val user = userRepository.resolveId(jwtId)
+    override suspend fun update(characterSummary: CharacterSummary, jwtSubject: String): Unit = dbQuery {
+        val user = userRepository.resolveSubject(jwtSubject)
         characterRepository.update(characterSummary, user)
     }
 
-    override suspend fun delete(id: Int, jwtId: String): Boolean = dbQuery {
-        val user = userRepository.resolveId(jwtId)
+    override suspend fun delete(id: Int, jwtSubject: String): Boolean = dbQuery {
+        val user = userRepository.resolveSubject(jwtSubject)
         characterRepository.delete(id, user)
     }
 }

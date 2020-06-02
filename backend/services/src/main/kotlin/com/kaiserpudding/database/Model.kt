@@ -94,6 +94,6 @@ object SkillTable : Table("skills") {
 
 object UserTable : Table("users") {
     val id = UserTable.integer("id").autoIncrement()
-    val jwtId = UserTable.varchar("jwt_id", 40).uniqueIndex()
+    val jwtSubject = UserTable.varchar("jwt_subject", 40).uniqueIndex()
     override val primaryKey: PrimaryKey = PrimaryKey(id)
 }
