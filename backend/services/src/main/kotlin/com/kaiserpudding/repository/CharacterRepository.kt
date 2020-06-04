@@ -66,11 +66,16 @@ class CharacterRepository : AbstractRepository() {
     )
 
     fun update(characterSummary: CharacterSummary, user: Int) {
+        val oldUser = get(characterSummary.id) ?: return
         CharacterTable.verifyUser(characterSummary.id, user)
             .update({ CharacterTable.id eq characterSummary.id }) {
                 it[name] = characterSummary.name
                 it[role] = characterSummary.role.name
             }
+
+        if (oldUser.role != characterSummary.role) {
+            SkillRepository().deleteByCharacter(characterSummary.id)
+        }
     }
 
     fun delete(id: Int, user: Int): Boolean {

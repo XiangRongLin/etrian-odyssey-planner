@@ -131,12 +131,27 @@ internal class CharacterRepositoryTest : AbstractRepositoryTest() {
     }
 
     @Test
-    fun `update(), valid`() = dbTest {
-        val summary = CharacterSummary(character.id, "new name", "Medic")
+    fun `update(), change name does not affect skills`() = dbTest {
+        val summary = CharacterSummary(character.id, "new name", character.role)
         repository.update(summary, user.id)
         val actual = repository.get(character.id)
 
         assertEqualsCharacter(summary, actual)
+
+        val actualSkills = SkillRepository().getByCharacter(character.id)
+        assertEquals(1, actualSkills.size)
+    }
+
+    @Test
+    fun `update(), changing role also deletes all skills`() = dbTest {
+        val summary = CharacterSummary(character.id, character.name, "Medic")
+        repository.update(summary, user.id)
+        val actual = repository.get(character.id)
+
+        assertEqualsCharacter(summary, actual)
+
+        val actualSkills = SkillRepository().getByCharacter(character.id)
+        assertEquals(0, actualSkills.size)
     }
 
     @Test

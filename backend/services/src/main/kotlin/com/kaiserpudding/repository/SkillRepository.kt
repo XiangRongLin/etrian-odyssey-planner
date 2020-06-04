@@ -3,9 +3,7 @@ package com.kaiserpudding.repository
 import com.kaiserpudding.SkillRestrictionException
 import com.kaiserpudding.database.SkillTable
 import com.kaiserpudding.model.Skill
-import com.kaiserpudding.model.SkillInfo
 import org.jetbrains.exposed.sql.*
-import java.lang.IllegalArgumentException
 
 class SkillRepository : AbstractRepository() {
 
@@ -71,6 +69,10 @@ class SkillRepository : AbstractRepository() {
 
     fun delete(character: Int, skillInfo: Int) {
         SkillTable.deleteWhere { (SkillTable.characterId eq character) and (SkillTable.skillInfoId eq skillInfo) }
+    }
+
+    internal fun deleteByCharacter(character: Int) {
+        SkillTable.deleteWhere { SkillTable.characterId eq character }
     }
 
     /**
