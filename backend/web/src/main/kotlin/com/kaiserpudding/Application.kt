@@ -1,6 +1,5 @@
 package com.kaiserpudding
 
-import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.kaiserpudding.api.gamedata.role
@@ -15,8 +14,7 @@ import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
-import io.ktor.auth.*
-import io.ktor.auth.jwt.JWTCredential
+import io.ktor.auth.Authentication
 import io.ktor.auth.jwt.JWTPrincipal
 import io.ktor.auth.jwt.jwt
 import io.ktor.features.CORS
@@ -37,12 +35,14 @@ import io.ktor.routing.Routing
 import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.sessions.*
+import io.ktor.util.KtorExperimentalAPI
 import kotlin.collections.set
 
 fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
 }
 
+@KtorExperimentalAPI
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
@@ -65,25 +65,15 @@ fun Application.module(testing: Boolean = false) {
     }
 
     install(Authentication) {
-        basic(name = "basicAuth") {
-            validate { credentials ->
-                if (credentials.name == credentials.password) {
-                    UserIdPrincipal(credentials.name)
-                } else {
-                    null
-                }
-            }
-        }
         val jwtIssuer = environment.config.property("jwt.domain").getString()
         val jwtAudience = environment.config.property("jwt.audience").getString()
         val jwtRealm = environment.config.property("jwt.realm").getString()
         val jwkProvider = JwkProviderBuilder(jwtIssuer).build()
-        jwt(name = "jwt") {
+        jwt {
             realm = jwtRealm
             verifier(jwkProvider, jwtIssuer)
             validate { credential ->
-                JWTPrincipal(credential.payload)
-//                if (credential.payload.audience.contains(jwtAudience)) JWTPrincipal(credential.payload) else null
+                if (credential.payload.audience.contains(jwtAudience)) JWTPrincipal(credential.payload) else null
             }
         }
     }
@@ -159,24 +149,3 @@ data class MySession(val count: Int = 0)
 
 class AuthenticationException : RuntimeException()
 class AuthorizationException : RuntimeException()
-
-//private fun makeJwtVerifier(issuer: String, audience: String): JWTVerifier {
-//    val publicKey =
-//    val algorithm = Algorithm.RSA256()
-//
-//    val build = JWT
-//        .require(algorithm)
-//        .withAudience(audience)
-//        .withIssuer(issuer)
-//        .build()
-//    return build
-//}
-fun AuthenticationPipeline.jwtAuthentication(
-    jwkProvider: JwkProvider,
-    issuer: String,
-    realm: String,
-    validate: (JWTCredential) -> Principal?
-) {
-
-}
-

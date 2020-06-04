@@ -24,7 +24,7 @@ fun Route.party(serviceLocator: ServiceLocator) {
             call.respond(checkNotNull(serviceLocator.partyService.get(id)))
         }
 
-        authenticate("jwt") {
+        authenticate {
             post("/") {
                 val party: NewParty = call.receive()
                 call.respond(HttpStatusCode.Created, serviceLocator.partyService.create(party, call.jwtSubject()))

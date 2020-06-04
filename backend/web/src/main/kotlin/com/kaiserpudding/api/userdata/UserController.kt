@@ -12,7 +12,7 @@ import io.ktor.routing.route
 
 fun Route.user(serviceLocator: ServiceLocator) {
     route("api/user") {
-        authenticate("jwt") {
+        authenticate {
             post("/") {
                 call.respond(HttpStatusCode.Created, serviceLocator.userService.create(call.jwtSubject()))
             }

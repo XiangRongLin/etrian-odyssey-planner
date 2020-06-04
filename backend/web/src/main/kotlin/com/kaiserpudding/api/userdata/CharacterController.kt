@@ -37,7 +37,7 @@ fun Route.character(serviceLocator: ServiceLocator) {
                 call.respond(HttpStatusCode.NotFound)
             }
         }
-        authenticate("jwt") {
+        authenticate {
             post("/") {
                 val character: NewCharacter = call.receive()
                 call.respond(HttpStatusCode.OK, serviceLocator.characterService.create(character, call.jwtSubject()))
