@@ -170,6 +170,26 @@ internal class PartyRepositoryTest : AbstractRepositoryTest() {
         assertEqualsMember(member, actual.members.first())
     }
 
+    @Test
+    fun `updateMember(), max 5 members`() = dbTest {
+        val characterId0 = CharacterRepository().create(NewCharacter("name", "Medic"), user.id)
+        val member0 = NewPartyMember(characterId0, Position.FRONT_LEFT)
+        val characterId1 = CharacterRepository().create(NewCharacter("name", "Medic"), user.id)
+        val member1 = NewPartyMember(characterId1, Position.FRONT_RIGHT)
+        val characterId2 = CharacterRepository().create(NewCharacter("name", "Medic"), user.id)
+        val member2 = NewPartyMember(characterId2, Position.BACK_LEFT)
+        val characterId3 = CharacterRepository().create(NewCharacter("name", "Medic"), user.id)
+        val member3 = NewPartyMember(characterId3, Position.BACK_RIGHT)
+        repository.insertOrUpdateMembers(party.id, listOf(member0, member1, member2, member3), user.id)
+
+
+        val characterId4 = CharacterRepository().create(NewCharacter("name", "Medic"), user.id)
+        val member4 = NewPartyMember(characterId4, Position.BACK_MIDDLE)
+        assertThrows(IllegalStateException::class.java) {
+            repository.insertOrUpdateMembers(party.id, listOf(member4), user.id)
+        }
+    }
+
     private fun assertEqualsMember(expected: NewPartyMember, actual: PartyMember) {
         assertEquals(expected.characterId, actual.characterSummary.id)
         assertEquals(expected.position, actual.position)

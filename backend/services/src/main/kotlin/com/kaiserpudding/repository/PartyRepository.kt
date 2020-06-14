@@ -88,6 +88,7 @@ class PartyRepository : AbstractRepository() {
                 }
             }
         }
+        if (getPartyMembers(party).size > 5) throw IllegalStateException()
     }
 
     private fun deleteMember(party: Int, character: Int): Boolean {
